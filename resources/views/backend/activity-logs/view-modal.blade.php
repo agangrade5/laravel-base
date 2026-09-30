@@ -71,18 +71,6 @@
                                 N/A
                             </div>
                         </div>
-                        <!-- Event -->
-                        {{-- <div class="col-md-6">
-                            <div class="fw-semibold mb-1">
-                                Event
-                            </div>
-                            <div
-                                id="log-event"
-                                class="text-muted"
-                            >
-                                N/A
-                            </div>
-                        </div> --}}
                         <!-- Date -->
                         <div class="col-md-6">
                             <div class="fw-semibold mb-1">

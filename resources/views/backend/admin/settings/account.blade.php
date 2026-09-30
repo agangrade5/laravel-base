@@ -119,7 +119,7 @@
             </div>
             <div class="col-12">
                 <button type="submit" class="btn btn-primary px-4 py-2" id="save-account-btn">
-                    Save Changes
+                    <i class="bi bi-check-lg me-1"></i> Save Changes
                 </button>
             </div>
         </form>

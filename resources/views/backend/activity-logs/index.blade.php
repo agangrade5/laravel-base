@@ -66,7 +66,6 @@
                                         <th class="ps-4">S.No</th>
                                         <th>User</th>
                                         <th>Log Name</th>
-                                        {{-- <th>Event</th> --}}
                                         <th>Description</th>
                                         <th>Date & Time</th>
                                         <th class="text-end">Actions</th>
@@ -137,15 +136,6 @@
                                                 {{ $log->log_name ?? 'default' }}
                                             </span>
                                         </td>
-                                        <!-- Event -->
-                                        {{-- <td>
-                                            <span
-                                                class="badge bg-{{ $eventClass }}-subtle text-{{ $eventClass }}"
-                                            >
-                                                <i class="bi {{ $eventIcon }} me-1"></i>
-                                                {{ ucfirst($log->event ?? 'activity') }}
-                                            </span>
-                                        </td> --}}
                                         <!-- Description -->
                                         <td>
                                             <div

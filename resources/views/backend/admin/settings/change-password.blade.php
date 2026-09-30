@@ -82,7 +82,7 @@
                     class="btn btn-primary px-4 py-2"
                     id="change-password-btn"
                 >
-                    Update Password
+                    <i class="bi bi-check-lg me-1"></i> Update Password
                 </button>
             </div>
         </form>
