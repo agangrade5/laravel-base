@@ -1,0 +1,101 @@
+{
+  "resources/css/backend/admin.css": {
+    "file": "css/backend/admin.css",
+    "src": "resources/css/backend/admin.css",
+    "isEntry": true,
+    "name": "admin",
+    "names": [
+      "admin.css"
+    ]
+  },
+  "resources/js/backend/account-settings.js": {
+    "file": "js/backend/account-settings.js",
+    "name": "account-settings",
+    "src": "resources/js/backend/account-settings.js",
+    "isEntry": true
+  },
+  "resources/js/backend/activity-logs.js": {
+    "file": "js/backend/activity-logs.js",
+    "name": "activity-logs",
+    "src": "resources/js/backend/activity-logs.js",
+    "isEntry": true
+  },
+  "resources/js/backend/admin.js": {
+    "file": "js/backend/admin.js",
+    "name": "admin",
+    "src": "resources/js/backend/admin.js",
+    "isEntry": true
+  },
+  "resources/js/backend/aws-settings.js": {
+    "file": "js/backend/aws-settings.js",
+    "name": "aws-settings",
+    "src": "resources/js/backend/aws-settings.js",
+    "isEntry": true
+  },
+  "resources/js/backend/change-password.js": {
+    "file": "js/backend/change-password.js",
+    "name": "change-password",
+    "src": "resources/js/backend/change-password.js",
+    "isEntry": true
+  },
+  "resources/js/backend/country-code.js": {
+    "file": "js/backend/country-code.js",
+    "name": "country-code",
+    "src": "resources/js/backend/country-code.js",
+    "isEntry": true
+  },
+  "resources/js/backend/email-settings.js": {
+    "file": "js/backend/email-settings.js",
+    "name": "email-settings",
+    "src": "resources/js/backend/email-settings.js",
+    "isEntry": true
+  },
+  "resources/js/backend/general-settings.js": {
+    "file": "js/backend/general-settings.js",
+    "name": "general-settings",
+    "src": "resources/js/backend/general-settings.js",
+    "isEntry": true
+  },
+  "resources/js/backend/google2fa-settings.js": {
+    "file": "js/backend/google2fa-settings.js",
+    "name": "google2fa-settings",
+    "src": "resources/js/backend/google2fa-settings.js",
+    "isEntry": true
+  },
+  "resources/js/backend/image-cropper.js": {
+    "file": "js/backend/image-cropper.js",
+    "name": "image-cropper",
+    "src": "resources/js/backend/image-cropper.js",
+    "isEntry": true
+  },
+  "resources/js/backend/otp-settings.js": {
+    "file": "js/backend/otp-settings.js",
+    "name": "otp-settings",
+    "src": "resources/js/backend/otp-settings.js",
+    "isEntry": true
+  },
+  "resources/js/backend/twilio-settings.js": {
+    "file": "js/backend/twilio-settings.js",
+    "name": "twilio-settings",
+    "src": "resources/js/backend/twilio-settings.js",
+    "isEntry": true
+  },
+  "resources/js/backend/user-login.js": {
+    "file": "js/backend/user-login.js",
+    "name": "user-login",
+    "src": "resources/js/backend/user-login.js",
+    "isEntry": true
+  },
+  "resources/js/backend/user.js": {
+    "file": "js/backend/user.js",
+    "name": "user",
+    "src": "resources/js/backend/user.js",
+    "isEntry": true
+  },
+  "resources/js/backend/verify-otp.js": {
+    "file": "js/backend/verify-otp.js",
+    "name": "verify-otp",
+    "src": "resources/js/backend/verify-otp.js",
+    "isEntry": true
+  }
+}

@@ -22,7 +22,8 @@ DB_PASSWORD=
 - php artisan serve
 - You can access your application using http://127.0.0.1:8000 url
 
-#### application start process
+## Application Start Process
+
 - Login page for admin http://{APP_URL}/admin/login
 - Admin Details ( super_admin@mailinator.com / Admin@123 )
 - Login page for user http://{APP_URL}/login
