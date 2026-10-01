@@ -15,7 +15,7 @@ class AdminUserSeeder extends Seeder
     {
         $admin = User::updateOrCreate(
             [
-                'email' => 'super_admin@mailinator.com',
+                'email' => 'laravel_base@mailinator.com',
             ],
             [
                 'name' => 'Administrator',

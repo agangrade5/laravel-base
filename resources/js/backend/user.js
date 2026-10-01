@@ -35,13 +35,13 @@ document.addEventListener('DOMContentLoaded', () => {
         if (editUserId) {
             const form = document.getElementById('edit-user-form');
             if (form) {
-                form.action = `/admin/users/update/${editUserId}`;
+                form.action = route('admin.users.update', editUserId);
             }
         }
         if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
             const editUserModal = new bootstrap.Modal(editModalEl);
             editUserModal.show();
-        }
+        }7
     } else if (addModalEl && addModalEl.querySelector('.is-invalid')) {
         if (typeof bootstrap !== 'undefined' && bootstrap.Modal) {
             const addUserModal = new bootstrap.Modal(addModalEl);
@@ -61,7 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const form = document.getElementById('edit-user-form');
             if (form) {
-                form.action = `/admin/users/update/${id}`;
+                form.action = route('admin.users.update', id);
             }
 
             const editIdInput = document.getElementById('edit_user_id');

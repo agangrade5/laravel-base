@@ -25,6 +25,6 @@ DB_PASSWORD=
 ## Application Start Process
 
 - Login page for admin http://{APP_URL}/admin/login
-- Admin Details ( super_admin@mailinator.com / Admin@123 )
+- Admin Details ( laravel_base@mailinator.com / Admin@123 )
 - Login page for user http://{APP_URL}/login
 - after successfully login you will be redirected to a static dashboard page
