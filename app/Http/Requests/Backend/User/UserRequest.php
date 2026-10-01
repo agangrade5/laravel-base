@@ -48,7 +48,7 @@ class UserRequest extends FormRequest
                     ->pluck('iso')
                     ->implode(','),
             ],
-             'country_code' => [
+            'country_code' => [
                 'required',
                 'string',
                 'in:' . collect(config('countries.countries'))

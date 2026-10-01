@@ -62,8 +62,45 @@
                     @enderror
                 </div>
 
-                <!-- Password field -->
+                <!-- Mobile Number field -->
                 <div class="mb-3">
+                    <label class="form-label fw-semibold text-secondary-emphasis small" for="phone_number">Mobile Number</label>
+                    <div class="input-group">
+                        <!-- Country Code -->
+                        @include('partials.country-code-dropdown', [
+                            'idPrefix'      => 'register_',
+                            'selectedCode'  => old('country_code', '+91'),
+                            'buttonClass'   => 'btn border-0 bg-transparent text-white d-flex align-items-center justify-content-between h-100 px-2.5 w-100',
+                            'buttonStyle'   => 'border-right: 1px solid rgba(255,255,255,.12) !important;',
+                            'codeTextClass' => 'fw-semibold text-white small',
+                            'flagClass'     => 'rounded-1 border border-secondary shadow-xs flex-shrink-0',
+                            'showChevron'   => true,
+                            'wrapperWidth'  => '110px',
+                            'dropdownWidth' => '250px',
+                        ])
+
+                        <input
+                            type="text"
+                            name="phone_number"
+                            id="phone_number"
+                            class="form-control"
+                            value="{{ old('phone_number') }}"
+                            placeholder="Enter mobile number"
+                            inputmode="numeric"
+                            maxlength="15"
+                            required
+                        >
+                    </div>
+                    @error('country_code')
+                        <div class="text-danger small mt-1"><i class="bi bi-exclamation-circle me-1"></i>{{ $message }}</div>
+                    @enderror
+                    @error('phone_number')
+                        <div class="text-danger small mt-1"><i class="bi bi-exclamation-circle me-1"></i>{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <!-- Password field -->
+                {{-- <div class="mb-3">
                     <label class="form-label fw-semibold text-secondary-emphasis small" for="password">Password</label>
                     <div class="input-group">
                         <div class="input-group-text">
@@ -82,10 +119,10 @@
                     @error('password')
                         <div class="text-danger small mt-1"><i class="bi bi-exclamation-circle me-1"></i>{{ $message }}</div>
                     @enderror
-                </div>
+                </div> --}}
 
                 <!-- Password Confirmation field -->
-                <div class="mb-4">
+                {{-- <div class="mb-4">
                     <label class="form-label fw-semibold text-secondary-emphasis small" for="password_confirmation">Confirm Password</label>
                     <div class="input-group">
                         <div class="input-group-text">
@@ -104,7 +141,7 @@
                     @error('password_confirmation')
                         <div class="text-danger small mt-1"><i class="bi bi-exclamation-circle me-1"></i>{{ $message }}</div>
                     @enderror
-                </div>
+                </div> --}}
 
                 <!-- Submit Button -->
                 <div class="mb-3">

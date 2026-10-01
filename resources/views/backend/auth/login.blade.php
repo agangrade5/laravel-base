@@ -92,11 +92,6 @@
                 <p class="mb-1">
                     <a href="{{ route('admin.password.request') }}">I forgot my password</a>
                 </p>
-                {{-- <p class="mb-0">
-                    <a href="{{ route('register') }}">
-                        Create new account
-                    </a>
-                </p> --}}
             </div>
         </div>
     </div>

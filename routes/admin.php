@@ -219,20 +219,6 @@ Route::prefix('admin')
 
             /*
             |--------------------------------------------------------------------------
-            | Register Routes
-            |--------------------------------------------------------------------------
-            */
-            /* Route::get('/register', [
-                RegisterController::class,
-                'index',
-            ])->name('register');
-
-            Route::post('/register', [
-                RegisterController::class,
-                'register',
-            ])->name('register.submit'); */
-            /*
-            |--------------------------------------------------------------------------
             | Forgot Password Routes
             |--------------------------------------------------------------------------
             */
@@ -267,6 +253,21 @@ Route::middleware('guest')->group(function () {
     Route::get('/', function () {
         return redirect()->route('login');
     });
+
+    /*
+    |--------------------------------------------------------------------------
+    | Register Routes
+    |--------------------------------------------------------------------------
+    */
+    Route::get('/register', [
+        RegisterController::class,
+        'index',
+    ])->name('register');
+
+    Route::post('/register', [
+        RegisterController::class,
+        'register',
+    ])->name('register.submit');
 
     Route::prefix('login')->group(function () {
         Route::get('/', [

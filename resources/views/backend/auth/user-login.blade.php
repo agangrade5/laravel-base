@@ -212,6 +212,13 @@
                     </button>
                 </div>
             </form>
+            <div class="text-center mt-3 pt-3 border-top border-white-50">
+                <p class="mb-1">
+                    <a href="{{ route('register') }}">
+                        Create new account
+                    </a>
+                </p>
+            </div>
         </div>
     </div>
 </main>

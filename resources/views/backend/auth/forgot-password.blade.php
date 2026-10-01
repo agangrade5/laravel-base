@@ -58,11 +58,6 @@
                 <p class="mb-1">
                     <a href="{{ route('admin.login') }}">Back to Login</a>
                 </p>
-                {{-- <p class="mb-0">
-                    <a href="{{ route('register') }}">
-                        Create new account
-                    </a>
-                </p> --}}
             </div>
         </div>
         <!-- /.login-card-body -->

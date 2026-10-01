@@ -32,7 +32,6 @@ class RegisterRequest extends FormRequest
                 'max:50',
                 new NoScripts(),
             ],
-
             'email' => [
                 'required',
                 'string',
@@ -42,14 +41,32 @@ class RegisterRequest extends FormRequest
                 new NoScripts(),
                 new ValidEmailDomain(),
             ],
-
-            'password' => [
+            'country_iso' => [
+                'required',
+                'string',
+                'in:' . collect(config('countries.countries'))
+                    ->pluck('iso')
+                    ->implode(','),
+            ],
+            'country_code' => [
+                'required',
+                'string',
+                'in:' . collect(config('countries.countries'))
+                    ->pluck('code')
+                    ->implode(','),
+            ],
+           'phone_number' => [
+                'required',
+                'regex:/^[0-9]{10,15}$/',
+                'unique:users,phone_number',
+            ],
+            /* 'password' => [
                 'required',
                 'confirmed',
                 new NoScripts(),
                 new WithoutSpacesRule(),
                 new StrictPasswordRule(),
-            ],
+            ], */
         ];
     }
 
@@ -67,8 +84,8 @@ class RegisterRequest extends FormRequest
             'email.email' => trans('validation.email'),
             'email.unique' => trans('validation.unique'),
 
-            'password.required' => trans('validation.required'),
-            'password.confirmed' => trans('validation.password.confirmed'),
+            /* 'password.required' => trans('validation.required'),
+            'password.confirmed' => trans('validation.password.confirmed'), */
         ];
     }
 }

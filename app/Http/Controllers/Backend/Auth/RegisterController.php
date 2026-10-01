@@ -52,10 +52,6 @@ class RegisterController extends Controller
 
         $user->assignRole('user');
 
-        Auth::login($user);
-
-        $request->session()->regenerate();
-
         /*
         |--------------------------------------------------------------------------
         | Activity Log - Register
