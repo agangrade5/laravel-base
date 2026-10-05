@@ -20,11 +20,36 @@
     },
     "tags": [
         {
+            "name": "Master",
+            "description": "All dropdown values and master listing data"
+        },
+        {
             "name": "Auth",
             "description": "Register, Login, OTP and Logout"
         }
     ],
     "paths": {
+        "/phone-country-code": {
+            "get": {
+                "tags": [
+                    "Master"
+                ],
+                "summary": "Phone country code list",
+                "description": "Returns the list of countries with phone codes for the country code dropdown. Use `iso` as country_iso and `code` as country_code in /register.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Phone country codes fetched",
+                        "schema": {
+                            "$ref": "#/definitions/PhoneCountryCodeResponse"
+                        }
+                    }
+                }
+            }
+        },
         "/register": {
             "post": {
                 "tags": [
@@ -281,6 +306,46 @@
         }
     },
     "definitions": {
+        "PhoneCountryCode": {
+            "type": "object",
+            "properties": {
+                "iso": {
+                    "type": "string",
+                    "example": "in"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "India"
+                },
+                "code": {
+                    "type": "string",
+                    "example": "+91"
+                },
+                "flag": {
+                    "type": "string",
+                    "example": "🇮🇳"
+                }
+            }
+        },
+        "PhoneCountryCodeResponse": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Phone country codes fetched successfully."
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PhoneCountryCode"
+                    }
+                }
+            }
+        },
         "RegisterRequest": {
             "type": "object",
             "required": [

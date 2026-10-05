@@ -59,3 +59,48 @@ register ──► login ──► verify-otp ──► (use token) ──► lo
 3. `POST /verify-otp` – on a correct OTP the API returns `token`, `token_type` and `user`.
 4. Send the token with every protected request: `Authorization: Bearer {token}`
 5. `POST /send-otp` – use it to resend the OTP (a new OTP is generated and the wrong-attempt counter is reset).
+
+### Response format
+
+All API responses use the same structure:
+
+```json
+{
+    "status": true,
+    "message": "Login successful!",
+    "data": {}
+}
+```
+
+Validation errors (HTTP 422) return the first error in `message` and all errors in `data.errors`.
+
+### OTP rules
+
+| Rule                  | Value                                                                 |
+|-----------------------|-----------------------------------------------------------------------|
+| OTP validity          | `max_time` from the `otp` settings (default **90 seconds**)           |
+| Wrong attempts        | **3** attempts per OTP, then the OTP is blocked until it is resent    |
+| Send / resend limit   | **5** requests per **10 minutes** per account + IP (HTTP 429)         |
+| Delivery              | Email → notification, Phone → Twilio SMS                              |
+| Admin users           | Cannot login through OTP (use the admin login page)                   |
+| Storage               | OTP is stored **hashed** in cache (not in the database)               |
+
+OTP error responses include `data.reason` so the app does not have to depend on message text:
+
+| Situation                 | HTTP | Message example                                          | `data.reason`      |
+|---------------------------|------|----------------------------------------------------------|--------------------|
+| OTP expired               | 422  | `OTP has expired. Please request a new OTP.`             | `otp_expired`      |
+| Incorrect OTP             | 422  | `Incorrect OTP. 2 attempts remaining.`                   | `otp_invalid`      |
+| Maximum attempts reached  | 429  | `Incorrect OTP. Maximum attempts reached. Please resend OTP.` | `otp_max_attempts` |
+
+`otp_invalid` and `otp_max_attempts` responses also include `data.remaining_attempts`.
+
+## API (v1) – Master
+
+Master / dropdown data APIs. They are public (no token required) and use the same `{status, message, data}` response format.
+
+| Method | Endpoint               | Description                                         |
+|--------|------------------------|-----------------------------------------------------|
+| GET    | `/phone-country-code`  | Country list with phone codes (`config/countries.php`) |
+
+

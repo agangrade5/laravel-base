@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Helpers\UtilityHelper;
 use App\Http\Controllers\Controller;
+use App\Traits\ApiResponse;
 use App\Http\Requests\Api\v1\Auth\{LoginRequest, RegisterRequest, SendOtpRequest, VerifyOtpRequest};
+use App\Http\Resources\Api\v1\UserResource;
 use App\Models\UserDevice;
 use App\Notifications\SendOtpNotification;
 use App\Repositories\Contracts\{SettingRepositoryInterface, UserRepositoryInterface};
@@ -14,6 +16,8 @@ use Illuminate\Support\Facades\{Cache, Log, RateLimiter};
 
 class AuthController extends Controller
 {
+    use ApiResponse;
+
     // Maximum number of wrong OTP attempts
     private const MAX_OTP_ATTEMPTS = 3;
 
@@ -90,7 +94,7 @@ class AuthController extends Controller
         return $this->respond(
             true,
             'Registration successful. Please login to continue.',
-            ['user' => $this->userPayload($user)],
+            ['user' => UserResource::make($user)->resolve()],
             201
         );
     }
@@ -295,7 +299,7 @@ class AuthController extends Controller
         return $this->respond(true, 'Login successful!', [
             'token' => $newToken->plainTextToken,
             'token_type' => 'Bearer',
-            'user' => $this->userPayload($user),
+            'user' => UserResource::make($user)->resolve(),
         ]);
     }
 
@@ -554,25 +558,6 @@ class AuthController extends Controller
     }
 
     /**
-     * User payload
-     *
-     * @param User $user
-     *
-     * @return array
-     */
-    private function userPayload($user): array
-    {
-        return [
-            'id' => $user->id,
-            'name' => $user->name,
-            'email' => $user->email,
-            'country_code' => $user->country_code,
-            'phone_number' => $user->phone_number,
-            'phone' => $user->country_code . $user->phone_number,
-        ];
-    }
-
-    /**
      * Log activity
      *
      * @param string $message
@@ -595,24 +580,5 @@ class AuthController extends Controller
                 'user_agent' => $request->userAgent(),
             ], $extra)
         );
-    }
-
-    /**
-     * Respond with a given message.
-     *
-     * @param bool $status
-     * @param string $message
-     * @param mixed $data
-     * @param int $code
-     *
-     * @return JsonResponse
-     */
-    private function respond(bool $status, string $message, mixed $data = null, int $code = 200): JsonResponse
-    {
-        return response()->json([
-            'status' => $status,
-            'message' => $message,
-            'data' => $data,
-        ], $code);
     }
 }

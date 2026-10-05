@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\v1\AuthController;
+use App\Http\Controllers\Api\v1\{AuthController, MasterController};
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')
@@ -31,6 +31,16 @@ Route::prefix('v1')
             AuthController::class,
             'verifyOtp'
         ])->middleware('throttle:10,1')->name('verify-otp'); //throttle = 10,1 (10 requests per minute)
+
+        /*
+        |--------------------------------------------------------------------------
+        | Master Routes
+        |--------------------------------------------------------------------------
+        */
+        Route::get('/phone-country-code', [
+            MasterController::class,
+            'phoneCountryCode'
+        ])->name('phone-country-code');
 
         /*
         |--------------------------------------------------------------------------
