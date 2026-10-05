@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend\Auth;
 use App\Helpers\UtilityHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\Auth\{ForgotPasswordRequest, ResetPasswordRequest};
+use App\Models\User;
 use App\Repositories\Contracts\UserRepositoryInterface;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\{Auth, Log, Password};
@@ -182,7 +183,7 @@ class ForgotPasswordController extends Controller
             $request->validated(),
                 function ($user, $password) use ($email) {
                     if (
-                        (int) $user->id !== 1 ||
+                        (int) $user->id !== User::SUPER_ADMIN ||
                         !$user->hasRole('admin') ||
                         $user->email !== $email
                     ) {

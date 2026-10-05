@@ -51,7 +51,7 @@ class UserRepository implements UserRepositoryInterface
     {
         return User::query()
             ->where('email', $email)
-            ->where('id', 1)
+            ->where('id', User::SUPER_ADMIN)
             ->whereHas('roles', function ($query) {
                 $query->where('name', 'admin');
             })
@@ -68,6 +68,18 @@ class UserRepository implements UserRepositoryInterface
     public function findByPhone(string $phone): ?User
     {
         return User::where('phone_number', $phone)->first();
+    }
+
+    /**
+     * Method findByPhoneWithCountry
+     *
+     * @param string $phone
+     *
+     * @return User
+     */
+    public function findByPhoneWithCountry(string $phone): ?User
+    {
+        return User::whereRaw("CONCAT(country_code, phone_number) = ?", [$phone])->first();
     }
 
     /**
@@ -260,13 +272,13 @@ class UserRepository implements UserRepositoryInterface
     ): array {
         $data = [];
 
-        $data['withoutAdminByCount'] = User::where('id', '!=', 1)
+        $data['withoutAdminByCount'] = User::where('id', '!=', User::SUPER_ADMIN)
             ->whereDoesntHave('roles', function ($query) {
                 $query->where('name', 'admin');
             })
             ->count();
 
-        $data['roleByCount'] = User::where('id', '!=', 1)
+        $data['roleByCount'] = User::where('id', '!=', User::SUPER_ADMIN)
             ->whereDoesntHave('roles', function ($query) {
                 $query->where('name', 'admin');
             })

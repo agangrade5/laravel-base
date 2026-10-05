@@ -1,0 +1,621 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Api Documentation",
+        "version": "1.0.3",
+        "title": "documentation"
+    },
+    "host": "",
+    "basePath": "/api/v1/",
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "securityDefinitions": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    },
+    "tags": [
+        {
+            "name": "Auth",
+            "description": "Register, Login, OTP and Logout"
+        }
+    ],
+    "paths": {
+        "/register": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Register a new user",
+                "description": "Creates the account and stores the device. No token is returned; call /login next.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/RegisterRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "201": {
+                        "description": "Registration successful",
+                        "schema": {
+                            "$ref": "#/definitions/RegisterResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error / email or phone already taken",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/login": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login with email or phone (sends OTP)",
+                "description": "Checks the account and sends an OTP. The access token is returned by /verify-otp.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OTP sent successfully",
+                        "schema": {
+                            "$ref": "#/definitions/SendOtpResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Account not found / invalid credentials",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Inactive account / admin not allowed",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "429": {
+                        "description": "Too many OTP requests",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "OTP delivery failed",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/send-otp": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Send (or resend) login OTP",
+                "description": "Use this to resend the OTP. Resending resets the wrong-attempt counter.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/SendOtpRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OTP sent",
+                        "schema": {
+                            "$ref": "#/definitions/SendOtpResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Inactive account / admin not allowed",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "Account not found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "429": {
+                        "description": "Too many requests",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "500": {
+                        "description": "OTP delivery failed",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/verify-otp": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Verify OTP and get access token",
+                "description": "On success the device is saved/updated, any older token of the same device is revoked and a new token is issued.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "body",
+                        "name": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/VerifyOtpRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Login successful",
+                        "schema": {
+                            "$ref": "#/definitions/AuthResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Inactive account",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error / OTP expired (reason: otp_expired) / Incorrect OTP (reason: otp_invalid)",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "429": {
+                        "description": "Maximum attempts exceeded",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                }
+            }
+        },
+        "/logout": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Logout (revokes current device token)",
+                "description": "Revokes only the token of the current device.",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "Logged out",
+                        "schema": {
+                            "$ref": "#/definitions/SuccessResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
+        }
+    },
+    "definitions": {
+        "RegisterRequest": {
+            "type": "object",
+            "required": [
+                "name",
+                "email",
+                "country_iso",
+                "country_code",
+                "phone_number",
+                "timezone",
+                "device_id",
+                "device_type"
+            ],
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "John Doe"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "john@mailinator.com"
+                },
+                "country_iso": {
+                    "type": "string",
+                    "example": "in"
+                },
+                "country_code": {
+                    "type": "string",
+                    "example": "+91"
+                },
+                "phone_number": {
+                    "type": "string",
+                    "example": "9876543210"
+                },
+                "timezone": {
+                    "type": "string",
+                    "example": "Asia/Kolkata"
+                },
+                "device_id": {
+                    "type": "string",
+                    "description": "Unique device identifier",
+                    "example": "a1b2c3d4-device-id"
+                },
+                "device_type": {
+                    "type": "string",
+                    "enum": [
+                        "android",
+                        "ios"
+                    ],
+                    "example": "android"
+                }
+            }
+        },
+        "LoginRequest": {
+            "type": "object",
+            "required": [
+                "login_type",
+                "timezone",
+                "device_id",
+                "device_type"
+            ],
+            "properties": {
+                "login_type": {
+                    "type": "string",
+                    "enum": [
+                        "email",
+                        "phone"
+                    ],
+                    "example": "email"
+                },
+                "email": {
+                    "type": "string",
+                    "description": "Required when login_type = email",
+                    "example": "john@example.com"
+                },
+                "country_code": {
+                    "type": "string",
+                    "description": "Required when login_type = phone",
+                    "example": "+91"
+                },
+                "phone": {
+                    "type": "string",
+                    "description": "Required when login_type = phone",
+                    "example": "9876543210"
+                },
+                "timezone": {
+                    "type": "string",
+                    "example": "Asia/Kolkata"
+                },
+                "device_id": {
+                    "type": "string",
+                    "description": "Unique device identifier",
+                    "example": "a1b2c3d4-device-id"
+                },
+                "device_type": {
+                    "type": "string",
+                    "enum": [
+                        "android",
+                        "ios"
+                    ],
+                    "example": "android"
+                }
+            }
+        },
+        "SendOtpRequest": {
+            "type": "object",
+            "required": [
+                "login_type"
+            ],
+            "properties": {
+                "login_type": {
+                    "type": "string",
+                    "enum": [
+                        "email",
+                        "phone"
+                    ],
+                    "example": "email"
+                },
+                "email": {
+                    "type": "string",
+                    "description": "Required when login_type = email",
+                    "example": "john@example.com"
+                },
+                "country_code": {
+                    "type": "string",
+                    "description": "Required when login_type = phone",
+                    "example": "+91"
+                },
+                "phone": {
+                    "type": "string",
+                    "description": "Required when login_type = phone",
+                    "example": "9876543210"
+                },
+                "timezone": {
+                    "type": "string",
+                    "example": "Asia/Kolkata"
+                }
+            }
+        },
+        "VerifyOtpRequest": {
+            "type": "object",
+            "required": [
+                "login_type",
+                "otp",
+                "timezone",
+                "device_id",
+                "device_type"
+            ],
+            "properties": {
+                "login_type": {
+                    "type": "string",
+                    "enum": [
+                        "email",
+                        "phone"
+                    ],
+                    "example": "email"
+                },
+                "email": {
+                    "type": "string",
+                    "description": "Required when login_type = email",
+                    "example": "john@example.com"
+                },
+                "country_code": {
+                    "type": "string",
+                    "description": "Required when login_type = phone",
+                    "example": "+91"
+                },
+                "phone": {
+                    "type": "string",
+                    "description": "Required when login_type = phone",
+                    "example": "9876543210"
+                },
+                "otp": {
+                    "type": "string",
+                    "example": "123456"
+                },
+                "timezone": {
+                    "type": "string",
+                    "example": "Asia/Kolkata"
+                },
+                "device_id": {
+                    "type": "string",
+                    "description": "Unique device identifier",
+                    "example": "a1b2c3d4-device-id"
+                },
+                "device_type": {
+                    "type": "string",
+                    "enum": [
+                        "android",
+                        "ios"
+                    ],
+                    "example": "android"
+                }
+            }
+        },
+        "User": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "integer",
+                    "example": 1
+                },
+                "name": {
+                    "type": "string",
+                    "example": "John Doe"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "john@example.com"
+                },
+                "country_code": {
+                    "type": "string",
+                    "example": "+91"
+                },
+                "phone_number": {
+                    "type": "string",
+                    "example": "9876543210"
+                },
+                "phone": {
+                    "type": "string",
+                    "description": "country_code + phone_number",
+                    "example": "+919876543210"
+                }
+            }
+        },
+        "RegisterResponse": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Registration successful. Please login to continue."
+                },
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "user": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                }
+            }
+        },
+        "AuthResponse": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Login successful!"
+                },
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "token": {
+                            "type": "string",
+                            "example": "1|abcdef123456..."
+                        },
+                        "token_type": {
+                            "type": "string",
+                            "example": "Bearer"
+                        },
+                        "user": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
+                }
+            }
+        },
+        "SendOtpResponse": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "message": {
+                    "type": "string",
+                    "example": "OTP sent successfully."
+                },
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "expires_in": {
+                            "type": "integer",
+                            "description": "Seconds",
+                            "example": 90
+                        },
+                        "max_attempts": {
+                            "type": "integer",
+                            "example": 3
+                        }
+                    }
+                }
+            }
+        },
+        "SuccessResponse": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "message": {
+                    "type": "string",
+                    "example": "You have been logged out successfully."
+                },
+                "data": {
+                    "type": "object",
+                    "x-nullable": true
+                }
+            }
+        },
+        "ErrorResponse": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "boolean",
+                    "example": false
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Invalid OTP. 2 attempts remaining."
+                },
+                "data": {
+                    "type": "object",
+                    "description": "null, or extra info: {errors: {...}} on 422 validation; on OTP errors {reason: otp_expired | otp_invalid | otp_max_attempts, remaining_attempts: n}",
+                    "x-nullable": true
+                }
+            }
+        }
+    }
+}

@@ -44,6 +44,15 @@ interface UserRepositoryInterface
     public function findByPhone(string $phone): ?User;
 
     /**
+     * Method findByPhoneWithCountry
+     *
+     * @param string $phone
+     *
+     * @return User
+     */
+    public function findByPhoneWithCountry(string $phone): ?User;
+
+    /**
      * Method to retrieve all users
      *
      * @param string|null $search

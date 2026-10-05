@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Swagger UI</title>
+        <link rel="stylesheet" type="text/css" href="./swagger-ui.css" >
+        <link rel="icon" type="image/png" href="./favicon-32x32.png" sizes="32x32" />
+        <link rel="icon" type="image/png" href="./favicon-16x16.png" sizes="16x16" />
+        <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+        <style>
+            html { box-sizing: border-box; overflow: -moz-scrollbars-vertical; overflow-y: scroll; }
+            *, *:before, *:after { box-sizing: inherit; }
+            body { margin: 0; background: #fafafa; }
+        </style>
+    </head>
+
+    <body>
+        <div id="swagger-ui"></div>
+        
+        <script src="./swagger-ui-bundle.js"> </script>
+        <script src="./swagger-ui-standalone-preset.js"> </script>
+        <script>
+            /* let host = window.location.host;
+            let hostName = window.location.hostname;
+            let protocol = `${window.location.protocol}//`;
+            if (hostName !== "localhost") {
+                host = hostName;
+            } */
+            const host = window.location.host;
+            window.onload = function() {
+                function loadJson(path, callback) {
+                    var httpRequest = new XMLHttpRequest();
+                    httpRequest.onreadystatechange = function () {
+                        if (httpRequest.readyState === 4) {
+                            if (httpRequest.status === 200) {
+                                var data = JSON.parse(httpRequest.responseText);
+                                if (callback) callback(data);
+                            } else {
+                                console.error("api-docs.json load error:", httpRequest.status, path);
+                            }
+                        }
+                    };
+                    httpRequest.open("GET", path);
+                    httpRequest.send();
+                }
+                // Begin Swagger UI call region
+                loadJson(
+                    //protocol + host + "/swagger/api-docs.json",
+                    "./api-docs.json",
+                    function (data) {
+                        // Begin Swagger UI call region
+                        const ui = SwaggerUIBundle({
+                            spec: Object.assign(data, { host: host }),
+                            dom_id: "#swagger-ui",
+                            deepLinking: true,
+                            docExpansion: "none",
+                            presets: [
+                                SwaggerUIBundle.presets.apis,
+                                SwaggerUIStandalonePreset,
+                            ],
+                            plugins: [SwaggerUIBundle.plugins.DownloadUrl],
+                            layout: "StandaloneLayout",
+                        });
+                        // End Swagger UI call region
+                        window.ui = ui;
+                    }
+                );
+            }
+        </script>
+    </body>
+</html>

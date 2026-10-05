@@ -11,13 +11,17 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use App\Notifications\CustomResetPasswordNotification;
+use Laravel\Sanctum\HasApiTokens;
 
 #[Fillable(['name', 'email', 'country_iso', 'country_code', 'phone_number', 'timezone', 'password', 'image', 'is_active'])]
 #[Hidden(['password', 'google2fa_secret', 'remember_token'])]
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable, HasRoles;
+    use HasApiTokens, HasFactory, Notifiable, HasRoles;
+
+    // super admin
+    public const SUPER_ADMIN = 1;
 
     /**
      * Get the attributes that should be cast.

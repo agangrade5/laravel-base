@@ -16,6 +16,9 @@ use Illuminate\View\View;
 
 class LoginController extends Controller
 {
+    // Maximum number of wrong OTP attempts
+    private const MAX_OTP_ATTEMPTS = 3;
+
     /**
      * Constructor
      *
@@ -345,7 +348,7 @@ class LoginController extends Controller
             /*
             | Maximum allowed wrong attempts
             */
-            'max_attempts' => 3,
+            'max_attempts' => self::MAX_OTP_ATTEMPTS,
         ]);
 
         /*
@@ -461,11 +464,11 @@ class LoginController extends Controller
             'attempts' =>
                 $otpData['attempts'] ?? 0,
             'maxAttempts' =>
-                $otpData['max_attempts'] ?? 3,
+                $otpData['max_attempts'] ?? self::MAX_OTP_ATTEMPTS,
             'remainingAttempts' =>
                 max(
                     0,
-                    ($otpData['max_attempts'] ?? 3)
+                    ($otpData['max_attempts'] ?? self::MAX_OTP_ATTEMPTS)
                     - ($otpData['attempts'] ?? 0)
                 ),
         ]);
@@ -586,7 +589,7 @@ class LoginController extends Controller
             (int) ($otpData['attempts'] ?? 0);
 
         $maxAttempts =
-            (int) ($otpData['max_attempts'] ?? 3);
+            (int) ($otpData['max_attempts'] ?? self::MAX_OTP_ATTEMPTS);
 
         /*
         |--------------------------------------------------------------------------
@@ -938,7 +941,7 @@ class LoginController extends Controller
                 /*
                 | Reset max attempts
                 */
-                'max_attempts' => 3,
+                'max_attempts' => self::MAX_OTP_ATTEMPTS,
             ]
         );
 

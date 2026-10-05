@@ -45,6 +45,8 @@
 
                 @csrf
 
+                <input type="hidden" name="timezone" id="timezone">
+
                 <!-- Login Type -->
                 <div class="mb-3">
 

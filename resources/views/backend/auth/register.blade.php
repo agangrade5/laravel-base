@@ -18,6 +18,7 @@
             <form method="POST" action="{{ route('register.submit') }}" id="register-form" class="needs-validation" novalidate>
                 @csrf
 
+                <input type="hidden" name="timezone" id="timezone">
                 <!-- Full name field -->
                 <div class="mb-3">
                     <label class="form-label fw-semibold text-secondary-emphasis small" for="name">Full Name</label>
