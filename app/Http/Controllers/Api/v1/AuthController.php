@@ -152,7 +152,7 @@ class AuthController extends Controller
 
         // OTP not found
         if (!$otpData) {
-            $this->log('OTP verification attempted with no active OTP.', null, $request, [
+            $this->log('OTP verification attempted with no active OTP (API).', null, $request, [
                 'login_type' => $type,
             ]);
 
@@ -167,7 +167,7 @@ class AuthController extends Controller
         // OTP expired check
         if (now()->timestamp > $otpData['expires_at']) {
             Cache::forget($key);
-            $this->log('OTP verification attempted with an expired OTP.', null, $request, [
+            $this->log('OTP verification attempted with an expired OTP (API).', null, $request, [
                 'login_type' => $type,
                 'user_id' => $otpData['user_id'],
             ]);
@@ -186,7 +186,7 @@ class AuthController extends Controller
         // User not found
         if (!$user) {
             Cache::forget($key);
-            $this->log('OTP verification attempted for a non-existent user.', null, $request, [
+            $this->log('OTP verification attempted for a non-existent user (API).', null, $request, [
                 'user_id' => $otpData['user_id'],
             ]);
 
@@ -196,7 +196,7 @@ class AuthController extends Controller
         // User inactive
         if (!$user->is_active) {
             Cache::forget($key);
-            $this->log('OTP verification attempted for an inactive user.', $user, $request);
+            $this->log('OTP verification attempted for an inactive user (API).', $user, $request);
 
             return $this->respond(false, 'Your account is inactive. Please contact the administrator.', null, 403);
         }
@@ -206,7 +206,7 @@ class AuthController extends Controller
 
         // OTP attempts exceeded
         if ($attempts >= self::MAX_OTP_ATTEMPTS) {
-            $this->log('OTP verification attempt blocked.', $user, $request, [
+            $this->log('OTP verification attempt blocked (API).', $user, $request, [
                 'max_attempts' => self::MAX_OTP_ATTEMPTS,
             ]);
 
@@ -232,8 +232,8 @@ class AuthController extends Controller
             // Activity log - Invalid OTP
             $this->log(
                 $isBlocked
-                    ? 'Invalid OTP entered. Maximum attempts reached, verification blocked.'
-                    : 'Invalid OTP entered.',
+                    ? 'Invalid OTP entered. Maximum attempts reached, verification blocked (API).'
+                    : 'Invalid OTP entered (API).',
                 $user,
                 $request,
                 [
@@ -394,7 +394,7 @@ class AuthController extends Controller
 
         // User not found
         if (!$user) {
-            $this->log('OTP requested for a non-existent account.', null, $request, [
+            $this->log('OTP requested for a non-existent account (API).', null, $request, [
                 'login_type' => $type,
                 'value' => $value,
             ]);
@@ -404,7 +404,7 @@ class AuthController extends Controller
 
         // User inactive
         if (!$user->is_active) {
-            $this->log('OTP requested for an inactive account.', $user, $request, ['login_type' => $type]);
+            $this->log('OTP requested for an inactive account (API).', $user, $request, ['login_type' => $type]);
 
             return $this->respond(false, 'Your account is inactive. Please contact the administrator.', null, 403);
         }
@@ -421,7 +421,7 @@ class AuthController extends Controller
 
         // OTP send rate limit check (to avoid unnecessary SMS and email costs)
         if (RateLimiter::tooManyAttempts($limiterKey, self::OTP_SEND_LIMIT)) {
-            $this->log('OTP send rate limit exceeded.', $user, $request, ['login_type' => $type]);
+            $this->log('OTP send rate limit exceeded (API).', $user, $request, ['login_type' => $type]);
 
             return $this->respond(
                 false,
