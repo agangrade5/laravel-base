@@ -32,6 +32,7 @@ class ChangePasswordRequest extends FormRequest
             'password' => [
                 'required',
                 'confirmed',
+                'different:current_password',
                 new WithoutSpacesRule(),
                 new StrictPasswordRule(),
             ],
@@ -48,6 +49,7 @@ class ChangePasswordRequest extends FormRequest
             'current_password.current_password' => trans('validation.current_password'),
             'password.required' => trans('validation.required'),
             'password.confirmed' => trans('validation.password.confirmed'),
+            'password.different' => trans('validation.password.different'),
         ];
     }
 }

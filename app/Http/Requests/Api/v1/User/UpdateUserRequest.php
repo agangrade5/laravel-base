@@ -1,23 +1,20 @@
 <?php
 
-namespace App\Http\Requests\Backend\User;
+namespace App\Http\Requests\Api\v1\User;
 
+use App\Http\Requests\Api\v1\ApiRequest;
 use App\Rules\NoScripts;
-use Illuminate\Contracts\Validation\ValidationRule;
-use Illuminate\Foundation\Http\FormRequest;
 use Closure;
 use Illuminate\Validation\Rule;
 
-class ProfileUpdateRequest extends FormRequest
+class UpdateUserRequest extends ApiRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
     public function authorize(): bool
     {
-        return auth()->check();
+        return true;
     }
 
     /**
@@ -28,8 +25,7 @@ class ProfileUpdateRequest extends FormRequest
     public function rules(): array
     {
         $countries = collect(config('countries.countries'));
-        $userId = $this->user()?->id;
-        $countryCode = $this->input('country_code', $this->user()?->country_code ?? '+91') ?: '+91';
+        $userId = (int) $this->route('id');
 
         return [
             'name' => [
@@ -42,16 +38,12 @@ class ProfileUpdateRequest extends FormRequest
             'country_iso' => [
                 'required',
                 'string',
-                'in:' . collect(config('countries.countries'))
-                    ->pluck('iso')
-                    ->implode(','),
+                Rule::in($countries->pluck('iso')->all()),
             ],
             'country_code' => [
-                'nullable',
+                'required',
                 'string',
-                'in:' . collect(config('countries.countries'))
-                    ->pluck('code')
-                    ->implode(','),
+                Rule::in($countries->pluck('code')->all()),
                 // The country_iso and country_code pair must match the configured values.
                 function (string $attribute, mixed $value, Closure $fail) use ($countries) {
                     $country = $countries->firstWhere('iso', strtolower((string) $this->input('country_iso')));
@@ -80,5 +72,15 @@ class ProfileUpdateRequest extends FormRequest
                 'boolean',
             ],
         ];
+    }
+
+    /**
+     * Prepare the data for validation.
+     */
+    protected function prepareForValidation(): void
+    {
+        if ($this->filled('country_iso')) {
+            $this->merge(['country_iso' => strtolower((string) $this->input('country_iso'))]);
+        }
     }
 }

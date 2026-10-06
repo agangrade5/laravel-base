@@ -170,7 +170,7 @@ class UserController extends Controller
         |--------------------------------------------------------------------------
         */
         UtilityHelper::customActivityLog(
-            'user',
+            'User',
             'Profile updated successfully.',
             $user,
             [
@@ -208,7 +208,7 @@ class UserController extends Controller
         |--------------------------------------------------------------------------
         */
         UtilityHelper::customActivityLog(
-            'auth',
+            'Auth',
             'Password changed successfully.',
             $user,
             [

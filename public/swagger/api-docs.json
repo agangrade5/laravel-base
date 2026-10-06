@@ -26,6 +26,14 @@
         {
             "name": "Auth",
             "description": "Register, Login, OTP and Logout"
+        },
+        {
+            "name": "Users",
+            "description": "Operations about user"
+        },
+        {
+            "name": "Account",
+            "description": "Operations related to user account"
         }
     ],
     "paths": {
@@ -275,7 +283,7 @@
         "/logout": {
             "post": {
                 "tags": [
-                    "Auth"
+                    "Account"
                 ],
                 "summary": "Logout (revokes current device token)",
                 "description": "Revokes only the token of the current device.",
@@ -303,49 +311,162 @@
                     }
                 ]
             }
+        },
+        "/users/{id}": {
+            "get": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Get user",
+                "description": "A user can fetch only their own record (admins can fetch any).",
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "type": "integer",
+                        "required": true,
+                        "description": "User id"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User fetched",
+                        "schema": {
+                            "$ref": "#/definitions/UserResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Not allowed to access this user",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Users"
+                ],
+                "summary": "Update user",
+                "description": "Updates name, phone country code, phone number and profile image. To upload `profile_image` (multipart), mobile clients must send **POST** with the extra field `_method=PUT` (PHP does not parse multipart on PUT). `country_iso` and `country_code` must belong to the same country (see /phone-country-code).",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "type": "integer",
+                        "required": true,
+                        "description": "User id"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "name",
+                        "type": "string",
+                        "required": true,
+                        "description": "3 to 50 characters"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "country_iso",
+                        "type": "string",
+                        "required": true,
+                        "description": "e.g. in"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "country_code",
+                        "type": "string",
+                        "required": true,
+                        "description": "e.g. +91"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "phone_number",
+                        "type": "string",
+                        "required": true,
+                        "description": "10 to 15 digits"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "profile_image",
+                        "type": "file",
+                        "required": false,
+                        "description": "jpg, jpeg, png, webp (max 2 MB)"
+                    },
+                    {
+                        "in": "formData",
+                        "name": "remove_profile_image",
+                        "type": "boolean",
+                        "required": false,
+                        "description": "Send true to remove the current image"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Profile updated",
+                        "schema": {
+                            "$ref": "#/definitions/UserResponse"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthenticated",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "403": {
+                        "description": "Not allowed to access this user",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "404": {
+                        "description": "User not found",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "schema": {
+                            "$ref": "#/definitions/ErrorResponse"
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ]
+            }
         }
     },
     "definitions": {
-        "PhoneCountryCode": {
-            "type": "object",
-            "properties": {
-                "iso": {
-                    "type": "string",
-                    "example": "in"
-                },
-                "name": {
-                    "type": "string",
-                    "example": "India"
-                },
-                "code": {
-                    "type": "string",
-                    "example": "+91"
-                },
-                "flag": {
-                    "type": "string",
-                    "example": "🇮🇳"
-                }
-            }
-        },
-        "PhoneCountryCodeResponse": {
-            "type": "object",
-            "properties": {
-                "status": {
-                    "type": "boolean",
-                    "example": true
-                },
-                "message": {
-                    "type": "string",
-                    "example": "Phone country codes fetched successfully."
-                },
-                "data": {
-                    "type": "array",
-                    "items": {
-                        "$ref": "#/definitions/PhoneCountryCode"
-                    }
-                }
-            }
-        },
         "RegisterRequest": {
             "type": "object",
             "required": [
@@ -567,6 +688,16 @@
                     "type": "string",
                     "description": "country_code + phone_number",
                     "example": "+919876543210"
+                },
+                "country_iso": {
+                    "type": "string",
+                    "example": "in"
+                },
+                "profile_image": {
+                    "type": "string",
+                    "x-nullable": true,
+                    "description": "Full image URL or null",
+                    "example": "http://localhost/storage/profile/abc.jpg"
                 }
             }
         },
@@ -673,12 +804,95 @@
                 },
                 "message": {
                     "type": "string",
-                    "example": "Invalid OTP. 2 attempts remaining."
+                    "example": "Custom error message."
                 },
                 "data": {
                     "type": "object",
                     "description": "null, or extra info: {errors: {...}} on 422 validation; on OTP errors {reason: otp_expired | otp_invalid | otp_max_attempts, remaining_attempts: n}",
                     "x-nullable": true
+                }
+            }
+        },
+        "PhoneCountryCode": {
+            "type": "object",
+            "properties": {
+                "iso": {
+                    "type": "string",
+                    "example": "in"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "India"
+                },
+                "code": {
+                    "type": "string",
+                    "example": "+91"
+                },
+                "flag": {
+                    "type": "string",
+                    "example": "🇮🇳"
+                }
+            }
+        },
+        "PhoneCountryCodeResponse": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "message": {
+                    "type": "string",
+                    "example": "Phone country codes fetched successfully."
+                },
+                "data": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/PhoneCountryCode"
+                    }
+                }
+            }
+        },
+        "ChangePasswordRequest": {
+            "type": "object",
+            "required": [
+                "password",
+                "password_confirmation"
+            ],
+            "properties": {
+                "current_password": {
+                    "type": "string",
+                    "description": "Required if the user already has a password",
+                    "example": "OldPass@123"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "NewPass@123"
+                },
+                "password_confirmation": {
+                    "type": "string",
+                    "example": "NewPass@123"
+                }
+            }
+        },
+        "UserResponse": {
+            "type": "object",
+            "properties": {
+                "status": {
+                    "type": "boolean",
+                    "example": true
+                },
+                "message": {
+                    "type": "string",
+                    "example": "User fetched successfully."
+                },
+                "data": {
+                    "type": "object",
+                    "properties": {
+                        "user": {
+                            "$ref": "#/definitions/User"
+                        }
+                    }
                 }
             }
         }

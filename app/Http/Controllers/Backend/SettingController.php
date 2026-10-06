@@ -44,7 +44,7 @@ class SettingController extends Controller
     {
         $user = Auth::user();
         $settings = $this->settingRepository->getAllSettingsFormatted($user?->id);
-        
+
         return view('backend.admin.settings', [
             'title' => 'Settings',
             'user' => $user,
@@ -83,7 +83,7 @@ class SettingController extends Controller
         |--------------------------------------------------------------------------
         */
         UtilityHelper::customActivityLog(
-            'setting',
+            'Setting',
             'Updated OTP Settings successfully.',
             $setting,
             [
@@ -147,7 +147,7 @@ class SettingController extends Controller
         |--------------------------------------------------------------------------
         */
         UtilityHelper::customActivityLog(
-            'setting',
+            'Setting',
             'Updated Twilio SMS Settings successfully.',
             $setting,
             [
@@ -200,7 +200,7 @@ class SettingController extends Controller
         |--------------------------------------------------------------------------
         */
         UtilityHelper::customActivityLog(
-            'setting',
+            'Setting',
             'Updated Email (SMTP) Settings successfully.',
             $setting,
             [
@@ -249,7 +249,7 @@ class SettingController extends Controller
         |--------------------------------------------------------------------------
         */
         UtilityHelper::customActivityLog(
-            'setting',
+            'Setting',
             'Updated AWS Cloud Settings successfully.',
             $setting,
             [
@@ -290,7 +290,7 @@ class SettingController extends Controller
         |--------------------------------------------------------------------------
         */
         UtilityHelper::customActivityLog(
-            'setting',
+            'Setting',
             'Setup 2FA for user: ' . $user->name,
             $user,
             [
@@ -352,7 +352,7 @@ class SettingController extends Controller
         |--------------------------------------------------------------------------
         */
         UtilityHelper::customActivityLog(
-            'auth',
+            'Auth',
             'Google 2FA enabled.',
             $user,
                 [
@@ -397,7 +397,7 @@ class SettingController extends Controller
         |--------------------------------------------------------------------------
         */
         UtilityHelper::customActivityLog(
-            'auth',
+            'Auth',
             'Google 2FA disabled.',
             $user,
                 [
@@ -453,7 +453,7 @@ class SettingController extends Controller
             |--------------------------------------------------------------------------
             */
             UtilityHelper::customActivityLog(
-                'setting',
+                'Setting',
                 'Updated setting successfully.',
                 $setting,
                 [
@@ -504,7 +504,7 @@ class SettingController extends Controller
                 |--------------------------------------------------------------------------
                 */
                 UtilityHelper::customActivityLog(
-                    'setting',
+                    'Setting',
                     'Maintenance mode enabled.',
                     null,
                     [
@@ -528,7 +528,7 @@ class SettingController extends Controller
             |--------------------------------------------------------------------------
             */
             UtilityHelper::customActivityLog(
-                'setting',
+                'Setting',
                 'Maintenance mode disabled.',
                 null,
                 [
@@ -565,7 +565,7 @@ class SettingController extends Controller
             |--------------------------------------------------------------------------
             */
             UtilityHelper::customActivityLog(
-                'setting',
+                'Setting',
                 'Application cache cleared successfully.',
                 null,
                 [
@@ -602,7 +602,7 @@ class SettingController extends Controller
             |--------------------------------------------------------------------------
             */
             UtilityHelper::customActivityLog(
-                'setting',
+                'Setting',
                 'Config cached successfully.',
                 null,
                 [
@@ -639,7 +639,7 @@ class SettingController extends Controller
             |--------------------------------------------------------------------------
             */
             UtilityHelper::customActivityLog(
-                'setting',
+                'Setting',
                 'Migrations executed successfully.',
                 null,
                 [
@@ -680,7 +680,7 @@ class SettingController extends Controller
             |--------------------------------------------------------------------------
             */
             UtilityHelper::customActivityLog(
-                'setting',
+                'Setting',
                 'Migrate fresh is disabled in production.',
                 null,
                 [
@@ -720,7 +720,7 @@ class SettingController extends Controller
             |--------------------------------------------------------------------------
             */
             UtilityHelper::customActivityLog(
-                'setting',
+                'Setting',
                 'Database refreshed and seeded successfully. Redirecting to login...',
                 null,
                 [

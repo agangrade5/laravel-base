@@ -4,6 +4,7 @@ namespace App\Http\Resources\Api\v1;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\Storage;
 
 class UserResource extends JsonResource
 {
@@ -18,9 +19,13 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
+            'country_iso' => $this->country_iso,
             'country_code' => $this->country_code,
             'phone_number' => $this->phone_number,
             'phone' => $this->country_code . $this->phone_number,
+            'profile_image' => $this->image
+                ? Storage::disk('public')->url($this->image)
+                : null,
         ];
     }
 }

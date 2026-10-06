@@ -6,7 +6,8 @@
 - cp .env.example .env
 - Create database in your local phpmyadmin
 - Update the DB configurations
-```
+
+```env
 DB_CONNECTION=mysql
 DB_HOST=localhost
 DB_PORT=3306
@@ -27,7 +28,11 @@ DB_PASSWORD=
 - Login page for admin http://{APP_URL}/admin/login
 - Admin Details ( laravel_base@mailinator.com / Admin@123 )
 - Login page for user http://{APP_URL}/login
-- after successfully login you will be redirected to a static dashboard page
+- After successfully login you will be redirected to a dashboard page
+
+## Application API Start Process
+
+- Developer for test api url http://{APP_URL}/swagger/index.html
 
 ## API (v1) – Authentication
 
@@ -44,7 +49,6 @@ The complete request/response documentation is available in `api-docs.json` (Swa
 | POST   | `/login`      | Public | Check the account and send OTP (no token)                |
 | POST   | `/send-otp`   | Public | Send or **resend** OTP                                   |
 | POST   | `/verify-otp` | Public | Verify OTP, save device and get the access token         |
-| POST   | `/logout`     | Bearer | Revoke the token of the current device                   |
 
 ### Login flow
 
@@ -103,4 +107,19 @@ Master / dropdown data APIs. They are public (no token required) and use the sam
 |--------|------------------------|-----------------------------------------------------|
 | GET    | `/phone-country-code`  | Country list with phone codes (`config/countries.php`) |
 
+## API (v1) – Users
 
+All endpoints below require `Authorization: Bearer {token}`.
+
+| Method | Endpoint           | Tag     | Description                                                   |
+|--------|--------------------|---------|---------------------------------------------------------------|
+| GET    | `/users/{id}`      | Users   | Get user details                                              |
+| PUT    | `/users/{id}`      | Users   | Update name, country code and phone number (FORM DATA)        |
+
+## API (v1) – Account
+
+All endpoints below require `Authorization: Bearer {token}`.
+
+| Method | Endpoint           | Tag     | Description                                                   |
+|--------|--------------------|---------|---------------------------------------------------------------|
+| POST   | `/logout`          | Account | Revoke the current device token                               |

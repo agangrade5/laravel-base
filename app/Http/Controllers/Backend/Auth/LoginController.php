@@ -84,7 +84,7 @@ class LoginController extends Controller
             |--------------------------------------------------------------------------
             */
             UtilityHelper::customActivityLog(
-                'auth',
+                'Auth',
                 'Failed login attempt.',
                 null,
                 [
@@ -159,7 +159,7 @@ class LoginController extends Controller
         |--------------------------------------------------------------------------
         */
         UtilityHelper::customActivityLog(
-            'auth',
+            'Auth',
             $user->hasRole('admin')
                 ? 'Admin logged in successfully.'
                 : 'User logged in successfully.',
@@ -235,7 +235,7 @@ class LoginController extends Controller
             |--------------------------------------------------------------------------
             */
             UtilityHelper::customActivityLog(
-                'auth',
+                'Auth',
                 'OTP requested for a non-existent account.',
                 null,
                 [
@@ -260,7 +260,7 @@ class LoginController extends Controller
         */
         if (!$user->is_active) {
             UtilityHelper::customActivityLog(
-                'auth',
+                'Auth',
                 'OTP requested for an inactive account.',
                 $user,
                 [
@@ -288,7 +288,7 @@ class LoginController extends Controller
         if ($user->hasRole('admin')) {
 
             UtilityHelper::customActivityLog(
-                'auth',
+                'Auth',
                 'Admin user attempted to login through OTP.',
                 $user,
                 [
@@ -378,7 +378,7 @@ class LoginController extends Controller
             |--------------------------------------------------------------------------
             */
             UtilityHelper::customActivityLog(
-                'auth',
+                'Auth',
                 'OTP sent successfully.',
                 $user,
                 [
@@ -403,7 +403,7 @@ class LoginController extends Controller
             |--------------------------------------------------------------------------
             */
             UtilityHelper::customActivityLog(
-                'auth',
+                'Auth',
                 'OTP delivery failed.',
                 $user,
                 [
@@ -501,7 +501,7 @@ class LoginController extends Controller
             |--------------------------------------------------------------------------
             */
             UtilityHelper::customActivityLog(
-                'auth',
+                'Auth',
                 'OTP verification attempted with no active OTP session.',
                 null,
                 [
@@ -531,7 +531,7 @@ class LoginController extends Controller
         if (!$user) {
 
             UtilityHelper::customActivityLog(
-                'auth',
+                'Auth',
                 'OTP verification attempted for a non-existent user account.',
                 null,
                 [
@@ -559,7 +559,7 @@ class LoginController extends Controller
         if (!$user->is_active) {
 
             UtilityHelper::customActivityLog(
-                'auth',
+                'Auth',
                 'OTP verification attempted for an inactive user account.',
                 $user,
                 [
@@ -605,7 +605,7 @@ class LoginController extends Controller
             |--------------------------------------------------------------------------
             */
             UtilityHelper::customActivityLog(
-                'auth',
+                'Auth',
                 'OTP verification attempt blocked.',
                 $user,
                 [
@@ -644,7 +644,7 @@ class LoginController extends Controller
             |--------------------------------------------------------------------------
             */
             UtilityHelper::customActivityLog(
-                'auth',
+                'Auth',
                 'OTP expired. Please resend OTP.',
                 $user,
                 [
@@ -711,7 +711,7 @@ class LoginController extends Controller
             |--------------------------------------------------------------------------
             */
             UtilityHelper::customActivityLog(
-                'auth',
+                'Auth',
                 $isNowBlocked
                     ? 'Invalid OTP entered. Maximum attempts reached, verification blocked.'
                     : 'Invalid OTP entered.',
@@ -774,7 +774,7 @@ class LoginController extends Controller
             |--------------------------------------------------------------------------
             */
             UtilityHelper::customActivityLog(
-                'auth',
+                'Auth',
                 'OTP verified but associated user account no longer exists.',
                 $user,
                 [
@@ -829,7 +829,7 @@ class LoginController extends Controller
         |--------------------------------------------------------------------------
         */
         UtilityHelper::customActivityLog(
-            'auth',
+            'Auth',
             'User logged in successfully using OTP.',
             $user,
             [
@@ -877,7 +877,7 @@ class LoginController extends Controller
             |--------------------------------------------------------------------------
             */
             UtilityHelper::customActivityLog(
-                'auth',
+                'Auth',
                 'OTP resend attempted with no active OTP session.',
                 null,
                 [
@@ -963,7 +963,7 @@ class LoginController extends Controller
             |--------------------------------------------------------------------------
             */
             UtilityHelper::customActivityLog(
-                'auth',
+                'Auth',
                 'OTP resend attempted but associated user account no longer exists.',
                 null,
                 [
@@ -1008,7 +1008,7 @@ class LoginController extends Controller
         |--------------------------------------------------------------------------
         */
         UtilityHelper::customActivityLog(
-            'auth',
+            'Auth',
             'A new OTP has been sent successfully.',
             $user,
             [
@@ -1043,7 +1043,7 @@ class LoginController extends Controller
         |--------------------------------------------------------------------------
         */
         UtilityHelper::customActivityLog(
-            'auth',
+            'Auth',
             $user->hasRole('admin')
                 ? 'Admin logged out successfully.'
                 : 'User logged out successfully.',

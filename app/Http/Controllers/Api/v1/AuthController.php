@@ -6,6 +6,7 @@ use App\Helpers\UtilityHelper;
 use App\Http\Controllers\Controller;
 use App\Traits\ApiResponse;
 use App\Http\Requests\Api\v1\Auth\{LoginRequest, RegisterRequest, SendOtpRequest, VerifyOtpRequest};
+use App\Http\Requests\Api\v1\Account\ChangePasswordRequest;
 use App\Http\Resources\Api\v1\UserResource;
 use App\Models\UserDevice;
 use App\Notifications\SendOtpNotification;
@@ -304,6 +305,46 @@ class AuthController extends Controller
     }
 
     /**
+     * POST /api/v1/change-password
+     *
+     * changePassword
+     *
+     * @param ChangePasswordRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function changePassword(ChangePasswordRequest $request): JsonResponse
+    {
+        $user = $request->user();
+        $currentTokenId = $user->currentAccessToken()->id;
+
+        $this->userRepository->updatePassword($user, $request->validated('password'));
+
+        // Security: Log out from all other devices while keeping the current device logged in.
+        $user->tokens()->where('id', '!=', $currentTokenId)->delete();
+
+        // Update other devices
+        UserDevice::where('user_id', $user->id)
+            ->where('token_id', '!=', $currentTokenId)
+            ->update(['token_id' => null, 'last_logout_at' => now()]);
+
+        // Activity Log - Password changed
+        UtilityHelper::customActivityLog(
+            'Account',
+            'Password changed successfully (API).',
+            $user,
+            [
+                'user_id' => $user->id,
+                'email' => $user->email,
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ]
+        );
+
+        return $this->respond(true, 'Password updated successfully.');
+    }
+
+    /**
      * POST /api/v1/logout (auth:sanctum)
      *
      * Logout the user
@@ -570,7 +611,7 @@ class AuthController extends Controller
     private function log(string $message, $user, Request $request, array $extra = []): void
     {
         UtilityHelper::customActivityLog(
-            'auth',
+            'Auth',
             $message,
             $user,
             array_merge([

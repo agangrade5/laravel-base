@@ -71,8 +71,8 @@ class ForgotPasswordController extends Controller
             );
         } catch (\Throwable $e) {
             Log::channel('auth')->error('Password reset email failed', [
-                'email' => $request->email,
                 'user_id' => $user->id,
+                'email' => $request->email,
                 'message' => $e->getMessage(),
                 'file' => $e->getFile(),
                 'line' => $e->getLine(),
@@ -93,10 +93,11 @@ class ForgotPasswordController extends Controller
             |--------------------------------------------------------------------------
             */
             UtilityHelper::customActivityLog(
-                'auth',
+                'Auth',
                 'Password reset link sent successfully.',
                 $user,
                 [
+                    'user_id' => $user->id,
                     'email' => $request->email,
                     'ip' => $request->ip(),
                     'user_agent' => $request->userAgent(),
@@ -122,10 +123,11 @@ class ForgotPasswordController extends Controller
         |--------------------------------------------------------------------------
         */
         UtilityHelper::customActivityLog(
-            'auth',
+            'Auth',
             'Password reset link request failed.',
             $user,
             [
+                'user_id' => $user->id,
                 'email' => $request->email,
                 'reason' => __($status),
                 'ip' => $request->ip(),
@@ -219,7 +221,7 @@ class ForgotPasswordController extends Controller
             |--------------------------------------------------------------------------
             */
             UtilityHelper::customActivityLog(
-                'auth',
+                'Auth',
                 'Password reset successfully.',
                 $user,
                 [
@@ -244,10 +246,11 @@ class ForgotPasswordController extends Controller
         |--------------------------------------------------------------------------
         */
         UtilityHelper::customActivityLog(
-            'auth',
+            'Auth',
             'Password reset failed.',
             $user,
             [
+                'user_id' => $user->id,
                 'email' => $request->validated('email'),
                 'reason' => __($status),
                 'ip' => $request->ip(),

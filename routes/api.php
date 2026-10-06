@@ -1,6 +1,6 @@
 <?php
 
-use App\Http\Controllers\Api\v1\{AuthController, MasterController};
+use App\Http\Controllers\Api\v1\{AuthController, MasterController, UserController};
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('v1')
@@ -49,9 +49,20 @@ Route::prefix('v1')
         */
         Route::middleware('auth:sanctum')
             ->group(function () {
+                /* Logout Route */
                 Route::post('logout', [
                     AuthController::class,
                     'logout'
                 ])->name('logout');
+
+                /* User Routes */
+                Route::get('/users/{id}', [
+                    UserController::class,
+                    'show'
+                ])->whereNumber('id');
+                Route::put('/users/{id}', [
+                    UserController::class,
+                    'update'
+                ])->whereNumber('id');
             });
     });

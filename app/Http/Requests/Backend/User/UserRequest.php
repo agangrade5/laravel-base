@@ -23,6 +23,7 @@ class UserRequest extends FormRequest
      */
     public function rules(): array
     {
+        $countries = collect(config('countries.countries'));
         $userId = $this->route('id');
 
         $rules = [
@@ -54,11 +55,22 @@ class UserRequest extends FormRequest
                 'in:' . collect(config('countries.countries'))
                     ->pluck('code')
                     ->implode(','),
+                // The country_iso and country_code pair must match the configured values.
+                function (string $attribute, mixed $value, Closure $fail) use ($countries) {
+                    $country = $countries->firstWhere('iso', strtolower((string) $this->input('country_iso')));
+
+                    if ($country && $country['code'] !== $value) {
+                        $fail('The country code does not match the selected country.');
+                    }
+                },
             ],
            'phone_number' => [
                 'required',
                 'regex:/^[0-9]{10,15}$/',
-                Rule::unique('users', 'phone_number')->ignore($userId),
+                // The phone number must be unique for the same country code.
+                Rule::unique('users', 'phone_number')
+                    ->where('country_code', $this->input('country_code'))
+                    ->ignore($userId),
             ],
             'is_active' => [
                 'nullable',
