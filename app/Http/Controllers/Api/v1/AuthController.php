@@ -485,8 +485,8 @@ class AuthController extends Controller
                 );
             }
 
-            // Activity Log - OTP Sent Successfully
-            $this->log('OTP sent successfully (API).', $user, $request, ['login_type' => $type]);
+            // Activity Log - Login OTP Sent Successfully
+            $this->log('Login OTP sent successfully (API).', $user, $request, ['login_type' => $type]);
         } catch (\Throwable $e) {
             // Clear OTP cache
             Cache::forget($this->cacheKey($type, $value));

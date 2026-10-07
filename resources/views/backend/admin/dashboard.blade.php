@@ -28,7 +28,7 @@
               <div class="col-lg-3 col-sm-6">
                 <div class="small-box text-bg-success">
                   <div class="inner">
-                    <h3>{{ $roleByCount['user'] }}</h3>
+                    <h3>{{ $roleByCount['user'] ?? 0  }}</h3>
                     <p>All Registered Users</p>
                   </div>
                   <i class="bi bi-people-fill small-box-icon"></i>
@@ -94,9 +94,7 @@
                                                 <div class="d-flex align-items-center">
                                                     <div class="flex-shrink-0 me-2">
                                                         <img
-                                                            src="{{ $log->causer?->image
-                                                                ? Storage::disk(config('filesystems.default'))->url($log->causer->image)
-                                                                : asset('assets/images/backend/user2-160x160.jpg') }}"
+                                                            src="{{ $log->causer?->image_url }}"
                                                             alt="{{ $log->causer?->name ?? 'System' }}"
                                                             class="img-size-32 rounded-circle"
                                                         >

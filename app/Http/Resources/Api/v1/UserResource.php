@@ -4,7 +4,7 @@ namespace App\Http\Resources\Api\v1;
 
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
-use Illuminate\Support\Facades\Storage;
+use App\Services\FileUploadService;
 
 class UserResource extends JsonResource
 {
@@ -24,7 +24,7 @@ class UserResource extends JsonResource
             'phone_number' => $this->phone_number,
             'phone' => $this->country_code . $this->phone_number,
             'profile_image' => $this->image
-                ? Storage::disk('public')->url($this->image)
+                ? app(FileUploadService::class)->url($this->image)
                 : null,
         ];
     }

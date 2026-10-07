@@ -11,9 +11,7 @@
         <div class="d-flex flex-column flex-sm-row align-items-center gap-4 mb-5 pb-4 border-bottom">
             <div class="avatar-preview-wrapper">
                 <img
-                    src="{{ $user->image
-                        ? Storage::disk(config('filesystems.default'))->url($user->image)
-                        : asset('assets/images/backend/user2-160x160.jpg') }}"
+                    src="{{ $user->image_url }}"
                     alt="{{ $user->name }}"
                     class="avatar-preview-img"
                     id="avatar-preview"

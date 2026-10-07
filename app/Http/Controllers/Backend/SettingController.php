@@ -557,8 +557,6 @@ class SettingController extends Controller
     public function optimizeClear(): JsonResponse
     {
         try {
-            Artisan::call('optimize:clear');
-
             /*
             |--------------------------------------------------------------------------
             | Activity Log
@@ -573,6 +571,8 @@ class SettingController extends Controller
                     'user_agent' => request()->userAgent(),
                 ]
             );
+
+            Artisan::call('optimize:clear');
 
             return response()->json([
                 'status' => true,
@@ -594,8 +594,6 @@ class SettingController extends Controller
     public function configCache(): JsonResponse
     {
         try {
-            Artisan::call('config:cache');
-
             /*
             |--------------------------------------------------------------------------
             | Activity Log
@@ -610,6 +608,8 @@ class SettingController extends Controller
                     'user_agent' => request()->userAgent(),
                 ]
             );
+
+            Artisan::call('config:cache');
 
             return response()->json([
                 'status' => true,
@@ -631,8 +631,6 @@ class SettingController extends Controller
     public function runMigrate(): JsonResponse
     {
         try {
-            Artisan::call('migrate', ['--force' => true]);
-
             /*
             |--------------------------------------------------------------------------
             | Activity Log
@@ -647,6 +645,8 @@ class SettingController extends Controller
                     'user_agent' => request()->userAgent(),
                 ]
             );
+
+            Artisan::call('migrate', ['--force' => true]);
 
             return response()->json([
                 'status' => true,
@@ -704,18 +704,6 @@ class SettingController extends Controller
 
             /*
             |--------------------------------------------------------------------------
-            | Force Logout
-            |--------------------------------------------------------------------------
-            | migrate:fresh wipes users + sessions tables, so the current
-            | authenticated session is no longer valid. Explicitly log out
-            | to clear guard state and invalidate the session/cookie cleanly.
-            */
-            Auth::guard('web')->logout();
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-
-            /*
-            |--------------------------------------------------------------------------
             | Activity Log
             |--------------------------------------------------------------------------
             */
@@ -728,6 +716,18 @@ class SettingController extends Controller
                     'user_agent' => $request->userAgent(),
                 ]
             );
+
+            /*
+            |--------------------------------------------------------------------------
+            | Force Logout
+            |--------------------------------------------------------------------------
+            | migrate:fresh wipes users + sessions tables, so the current
+            | authenticated session is no longer valid. Explicitly log out
+            | to clear guard state and invalidate the session/cookie cleanly.
+            */
+            Auth::guard('web')->logout();
+            $request->session()->invalidate();
+            $request->session()->regenerateToken();
 
             return response()->json([
                 'status' => true,

@@ -44,9 +44,7 @@
                     data-bs-toggle="dropdown"
                 >
                     <img
-                        src="{{ $user->image
-                            ? Storage::disk(config('filesystems.default'))->url($user->image)
-                            : asset('assets/images/backend/user2-160x160.jpg') }}"
+                        src="{{ $user->image_url }}"
                         alt="{{ $user->name }}"
                         class="user-image rounded-circle shadow"
                     >
@@ -60,9 +58,7 @@
                     <!--begin::User Image-->
                     <li class="user-header text-bg-primary">
                         <img
-                            src="{{ $user->image
-                                ? Storage::disk(config('filesystems.default'))->url($user->image)
-                                : asset('assets/images/backend/user2-160x160.jpg') }}"
+                            src="{{ $user->image_url }}"
                             alt="{{ $user->name }}"
                             class="rounded-circle shadow"
                         />

@@ -89,9 +89,7 @@
                                                 <div class="d-flex align-items-center">
                                                     <div class="flex-shrink-0 me-2">
                                                         <img
-                                                            src="{{ $log->causer?->image
-                                                                ? Storage::disk(config('filesystems.default'))->url($log->causer->image)
-                                                                : asset('assets/images/backend/user2-160x160.jpg') }}"
+                                                            src="{{ $log->causer?->image_url }}"
                                                             alt="{{ $log->causer?->name ?? 'System' }}"
                                                             class="img-size-32 rounded-circle"
                                                         >

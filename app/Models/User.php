@@ -12,6 +12,8 @@ use Illuminate\Notifications\Notifiable;
 use Spatie\Permission\Traits\HasRoles;
 use App\Notifications\CustomResetPasswordNotification;
 use Laravel\Sanctum\HasApiTokens;
+use App\Services\FileUploadService;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 #[Fillable(['name', 'email', 'country_iso', 'country_code', 'phone_number', 'timezone', 'password', 'image', 'is_active'])]
 #[Hidden(['password', 'google2fa_secret', 'remember_token'])]
@@ -44,6 +46,7 @@ class User extends Authenticatable
      * Send the password reset notification.
      *
      * @param  string  $token
+     *
      * @return void
      */
     public function sendPasswordResetNotification($token): void
@@ -55,10 +58,34 @@ class User extends Authenticatable
 
     /**
      * Get user-specific settings.
+     *
+     * @return HasMany
      */
     public function settings()
     {
         return $this->hasMany(Setting::class);
+    }
+
+    /**
+     * Get user image URL.
+     *
+     * @return Attribute
+     */
+    protected function imageUrl(): Attribute
+    {
+        return Attribute::get(function () {
+            $default = asset('assets/images/backend/user2-160x160.jpg');
+
+            if (!$this->image) {
+                return $default;
+            }
+
+            try {
+                return app(FileUploadService::class)->url($this->image) ?? $default;
+            } catch (\Throwable $e) {
+                return $default;
+            }
+        });
     }
 }
 

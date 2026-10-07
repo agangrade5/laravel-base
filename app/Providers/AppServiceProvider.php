@@ -5,8 +5,8 @@ namespace App\Providers;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Pagination\Paginator;
 use App\Services\MailConfigService;
-use Illuminate\Support\Facades\Http;
 use App\Repositories\Contracts\SettingRepositoryInterface;
+use App\Services\FileUploadService;
 use Illuminate\Support\Facades\Log;
 
 class AppServiceProvider extends ServiceProvider
@@ -16,7 +16,17 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        /*
+        |--------------------------------------------------------------------------
+        | File Upload Service
+        |--------------------------------------------------------------------------
+        |
+        | Registered as a singleton so the S3 disk (built from the settings table)
+        | is created only once per request. It is lazy, meaning the service is
+        | only instantiated on first use, so no database query runs at boot time.
+        |
+        */
+        $this->app->singleton(FileUploadService::class);
     }
 
     /**
@@ -42,22 +52,6 @@ class AppServiceProvider extends ServiceProvider
 
         if (! app()->runningInConsole()) {
             $mailConfigService->apply();
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | Global SSL certificate
-        |--------------------------------------------------------------------------
-        |
-        | Apply a global SSL certificate to all HTTP requests.
-        |
-        */
-        $caBundle = storage_path('certs/cacert.pem');
-
-        if (is_file($caBundle)) {
-            Http::globalOptions([
-                'verify' => $caBundle,
-            ]);
         }
 
         /*

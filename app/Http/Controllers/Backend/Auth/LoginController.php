@@ -374,12 +374,12 @@ class LoginController extends Controller
 
             /*
             |--------------------------------------------------------------------------
-            | Activity Log - OTP Sent Successfully
+            | Activity Log - Login OTP Sent Successfully
             |--------------------------------------------------------------------------
             */
             UtilityHelper::customActivityLog(
                 'Auth',
-                'OTP sent successfully.',
+                'Login OTP sent successfully.',
                 $user,
                 [
                     'user_id' => $user->id,

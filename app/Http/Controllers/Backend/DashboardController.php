@@ -38,7 +38,7 @@ class DashboardController extends Controller
         |--------------------------------------------------------------------------
         */
         $getCountByRole = $this->userRepository->getCountByRole();
-        $data['roleByCount'] = $getCountByRole['roleByCount'];
+        $data['roleByCount'] = $getCountByRole['roleByCount'] ?? [];
 
         /*
         |--------------------------------------------------------------------------

@@ -4,16 +4,23 @@ namespace App\Repositories;
 
 use App\Models\User;
 use App\Repositories\Contracts\UserRepositoryInterface;
+use App\Services\FileUploadService;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\UploadedFile;
-use Illuminate\Support\Facades\Storage;
-use Intervention\Image\ImageManager;
-use Intervention\Image\Drivers\Gd\Driver;
-use Intervention\Image\Format;
 
 class UserRepository implements UserRepositoryInterface
 {
+    /**
+     * UserRepository constructor.
+     *
+     * @param FileUploadService $fileUploadService
+     */
+    public function __construct(
+        private readonly FileUploadService $fileUploadService
+    ) {
+    }
+
     /**
      * Method create
      *
@@ -169,45 +176,22 @@ class UserRepository implements UserRepositoryInterface
         User $user,
         array $data
     ): bool {
-        $disk = config('filesystems.default');
-        /*
-        |--------------------------------------------------------------------------
-        | Remove Profile Image
-        |--------------------------------------------------------------------------
-        */
-        if (
-            !empty($data['remove_profile_image']) &&
-            $user->image
-        ) {
-            Storage::disk($disk)->delete(
-                $user->image
-            );
-
+        // Remove image
+        if (!empty($data['remove_profile_image']) && $user->image) {
+            $this->fileUploadService->delete($user->image);
             $data['image'] = null;
         }
 
-        /*
-        |--------------------------------------------------------------------------
-        | Upload New Profile Image
-        |--------------------------------------------------------------------------
-        */
+        // Upload new image (replaceImage() also deletes the old one)
         if (
             isset($data['profile_image']) &&
             $data['profile_image'] instanceof UploadedFile
         ) {
-            /*
-            |----------------------------------------------------------------------
-            | Delete Old Image
-            |----------------------------------------------------------------------
-            */
-            if ($user->image) {
-                Storage::disk($disk)->delete($user->image);
-            }
-
-            $data['image'] = $this->uploadProfileImage(
-                $user,
+            $data['image'] = $this->fileUploadService->replaceImage(
+                $user->image,
                 $data['profile_image'],
-                $disk
+                "profile-images/users/{$user->id}",
+                ['width' => 100, 'height' => 100]
             );
         }
 
@@ -216,51 +200,9 @@ class UserRepository implements UserRepositoryInterface
         | Remove Form Only Field
         |--------------------------------------------------------------------------
         */
-        unset(
-            $data['remove_profile_image'],
-            $data['profile_image']
-        );
+        unset($data['remove_profile_image'], $data['profile_image']);
 
         return $user->update($data);
-    }
-
-    /**
-     * Upload profile image.
-     *
-     * @param User $user
-     * @param UploadedFile $file
-     * @param string $disk
-     *
-     * @return string
-     */
-    private function uploadProfileImage(
-        User $user,
-        UploadedFile $file,
-        string $disk
-    ): string {
-        $manager = ImageManager::usingDriver(Driver::class);
-
-        $image = $manager->decode(
-            $file->getRealPath()
-        );
-
-        $image->cover(400, 400);
-
-        $imageData = $image
-            ->encodeUsingFormat(Format::WEBP, quality: 85)
-            ->toString();
-
-        $path = sprintf(
-            'profile-images/users/%d/avatar.webp',
-            $user->id
-        );
-
-        Storage::disk($disk)->put(
-            $path,
-            $imageData
-        );
-
-        return $path;
     }
 
     /**
