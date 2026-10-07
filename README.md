@@ -15,6 +15,21 @@ DB_DATABASE=database that you have created
 DB_USERNAME=root
 DB_PASSWORD=
 ```
+
+- Configure the file storage disk in `.env`
+
+```env
+# Local storage (default)
+FILESYSTEM_DISK=public
+
+# Amazon S3
+# FILESYSTEM_DISK=s3
+```
+
+  - `public`: files are stored locally (run `php artisan storage:link`).
+  - `s3`: files are stored in your S3 bucket. The AWS credentials (access key, secret, region and bucket) are **not** read from `.env`. Add them in the `aws` settings from the admin panel (stored in the `settings` table).
+  - After changing the disk, run `php artisan config:clear`.
+
 - php artisan key:generate
 - php artisan storage:link
 - php artisan migrate --seed
