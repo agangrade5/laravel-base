@@ -26,10 +26,9 @@ FILESYSTEM_DISK=public
 # FILESYSTEM_DISK=s3
 ```
 
-  - `public`: files are stored locally (run `php artisan storage:link`).
-  - `s3`: files are stored in your S3 bucket. The AWS credentials (access key, secret, region and bucket) are **not** read from `.env`. Add them in the `aws` settings from the admin panel (stored in the `settings` table).
-  - After changing the disk, run `php artisan config:clear`.
-
+- `public`: files are stored locally (run `php artisan storage:link`).
+- `s3`: files are stored in your S3 bucket. The AWS credentials (access key, secret, region and bucket) are **not** read from `.env`. Add them in the `aws` settings from the admin panel (stored in the `settings` table).
+- After changing the disk, run `php artisan config:clear`.
 - php artisan key:generate
 - php artisan storage:link
 - php artisan migrate --seed
