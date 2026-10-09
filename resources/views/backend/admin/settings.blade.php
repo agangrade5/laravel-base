@@ -9,7 +9,7 @@
         <div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-2">
              <div>
                 <h4 class="page-title pt-2">System Settings</h4>
-                <p class="page-subtitle text-muted mb-0">Configure and manage your account preferences.</p>
+                <p class="page-subtitle text-muted mb-0">Configure system parameters, user profile, security, and cloud services.</p>
              </div>
              <div class="dashboard-date-badge px-3 py-2 rounded-3 border d-flex align-items-center gap-2">
                 <nav aria-label="breadcrumb">
@@ -39,25 +39,25 @@
                             </a>
                             @role('admin')
                                 <a href="#general-setting" class="settings-nav-link mb-1" data-bs-toggle="pill" role="tab" aria-selected="false">
-                                    <i class="bi bi-gear me-2"></i>General Settings
+                                    <i class="bi bi-sliders me-2"></i> General & Actions
                                 </a>
                                 <a href="#change-password" class="settings-nav-link mb-1" data-bs-toggle="pill" role="tab" aria-selected="false">
-                                    <i class="bi bi-shield-lock me-2"></i>Change Password
+                                    <i class="bi bi-key-fill me-2"></i>Change Password
                                 </a>
                                 <a href="#google2fa" class="settings-nav-link mb-1" data-bs-toggle="pill" role="tab" aria-selected="false">
-                                    <i class="bi bi-shield-lock me-2"></i>Two-Factor Auth
+                                    <i class="bi bi-shield-lock-fill me-2"></i>Two-Factor Auth
                                 </a>
                                 <a href="#email-setting" class="settings-nav-link mb-1" data-bs-toggle="pill" role="tab" aria-selected="false">
-                                    <i class="bi bi-envelope-paper me-2"></i>Mail Settings
+                                    <i class="bi bi-envelope-at-fill me-2"></i>Mail (SMTP)
                                 </a>
                                 <a href="#otp-setting" class="settings-nav-link mb-1" data-bs-toggle="pill" role="tab" aria-selected="false">
-                                    <i class="bi bi-shield-check me-2"></i>OTP Settings
+                                    <i class="bi bi-phone me-2"></i>OTP Configuration
                                 </a>
                                 <a href="#twilio-setting" class="settings-nav-link mb-1" data-bs-toggle="pill" role="tab" aria-selected="false">
-                                    <i class="bi bi-chat-text me-2"></i>Twilio Settings
+                                    <i class="bi bi-chat-dots-fill me-2"></i>Twilio SMS
                                 </a>
                                 <a href="#aws-setting" class="settings-nav-link mb-1" data-bs-toggle="pill" role="tab" aria-selected="false">
-                                    <i class="bi bi-cloud me-2"></i>AWS Settings
+                                    <i class="bi bi-cloud-arrow-up-fill me-2"></i>AWS Cloud
                                 </a>
                             @endrole
                         </div>

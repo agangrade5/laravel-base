@@ -1,14 +1,10 @@
 <div class="card settings-card mb-4">
     <div class="card-header d-flex align-items-center">
-        <i class="bi bi-person-fill fs-4 me-2 text-primary"></i>
-        <div>
-            <h5 class="mb-0 fw-bold">Account Information</h5>
-            <small class="text-muted">Update your profile details and preferences</small>
-        </div>
+        <h5 class="mb-0 fw-bold"><i class="bi bi-person-bounding-box fs-4 me-2 text-primary"></i> Update Profile Details</h5>
     </div>
     <div class="card-body">
         <!-- Profile Avatar Section -->
-        <div class="d-flex flex-column flex-sm-row align-items-center gap-4 mb-5 pb-4 border-bottom">
+        <div class="d-flex flex-column flex-sm-row align-items-center gap-4 mb-3 pb-4 border-bottom">
             <div class="avatar-preview-wrapper">
                 <img
                     src="{{ $user->image_url }}"
@@ -25,10 +21,10 @@
             </div>
             <div class="text-center text-sm-start">
                 <h6 class="mb-1 fw-bold">Profile Picture</h6>
-                <p class="text-muted small mb-3">JPG, JPEG, PNG, or WEBP. Max size 2MB.</p>
+                <p class="text-muted small mb-3">Allowed file types: jpg, jpeg, png and webp. Max size: 2MB. Upload a new photo. A cropping popup will let you adjust the square frame before saving.</p>
                 <div class="d-flex gap-2 justify-content-center justify-content-sm-start">
                     <label for="avatar-file-input" class="btn btn-outline-primary btn-sm px-3">
-                        Upload Photo
+                        <i class="bi bi-crop me-1"></i> Choose & Crop Photo
                     </label>
                     {{-- <button type="button" class="btn btn-outline-secondary btn-sm" id="remove-avatar-btn">
                         Remove
@@ -117,7 +113,7 @@
             </div>
             <div class="col-12">
                 <button type="submit" class="btn btn-primary px-4 py-2" id="save-account-btn">
-                    <i class="bi bi-check-lg me-1"></i> Save Changes
+                    <i class="bi bi-check-circle me-1"></i> Update Profile
                 </button>
             </div>
         </form>

@@ -40,17 +40,17 @@ function initOtpSettings() {
             if (radioTrue && radioTrue.checked) {
                 otpDefaultInput.disabled = false;
                 otpDefaultInput.classList.remove('bg-body-secondary');
-                if (otpDefaultHelp) {
+                /* if (otpDefaultHelp) {
                     otpDefaultHelp.textContent = 'Static OTP code used when is_default is set to true.';
                     otpDefaultHelp.className = 'text-muted mt-1 d-block small';
-                }
+                } */
             } else if (radioFalse && radioFalse.checked) {
                 otpDefaultInput.disabled = true;
                 otpDefaultInput.classList.add('bg-body-secondary');
-                if (otpDefaultHelp) {
+                /* if (otpDefaultHelp) {
                     otpDefaultHelp.textContent = 'Static OTP code used when is_default is set to true.';
                     otpDefaultHelp.className = 'text-muted mt-1 d-block small';
-                }
+                } */
             }
         }
 

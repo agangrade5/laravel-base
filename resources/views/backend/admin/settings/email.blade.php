@@ -1,15 +1,11 @@
 <div class="card settings-card mb-4">
     <div class="card-header d-flex align-items-center">
-        <i class="bi bi-envelope-paper-fill fs-4 me-2 text-primary"></i>
-        <div>
-            <h5 class="mb-0 fw-bold">Mail (SMTP) Settings</h5>
-            <small class="text-muted">Configure mail server credentials and sender details for system emails.</small>
-        </div>
+        <h5 class="mb-0 fw-bold"><i class="bi bi-envelope-at-fill fs-4 me-2 text-primary"></i> Mail Server (SMTP) Settings</h5>
     </div>
     <div class="card-body">
         <form method="POST" action="{{ route('admin.settings.email') }}" id="email-settings-form" class="row g-4">
             @csrf
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <label class="form-label fw-semibold text-secondary small" for="mail_mailer">Mail Driver</label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="bi bi-hdd-network"></i></span>
@@ -23,8 +19,8 @@
                 </div>
             </div>
 
-            <div class="col-md-6">
-                <label class="form-label fw-semibold text-secondary small" for="mail_host">Mail Host</label>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold text-secondary small" for="mail_host">SMTP Host</label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="bi bi-globe"></i></span>
                     <input type="text" class="form-control" id="mail_host" name="mail_host" placeholder="smtp.gmail.com" value="{{ $mailData['mail_host'] ?? '' }}">
@@ -32,26 +28,14 @@
             </div>
 
             <div class="col-md-4">
-                <label class="form-label fw-semibold text-secondary small" for="mail_port">Mail Port</label>
+                <label class="form-label fw-semibold text-secondary small" for="mail_port">SMTP Port</label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="bi bi-hash"></i></span>
                     <input type="text" class="form-control" id="mail_port" name="mail_port" placeholder="587" value="{{ $mailData['mail_port'] ?? '587' }}">
                 </div>
             </div>
 
-            <div class="col-md-4">
-                <label class="form-label fw-semibold text-secondary small" for="mail_encryption">Encryption</label>
-                <div class="input-group">
-                    <span class="input-group-text"><i class="bi bi-shield-lock"></i></span>
-                    <select class="form-select" id="mail_encryption" name="mail_encryption">
-                        <option value="tls" {{ ($mailData['mail_encryption'] ?? 'tls') == 'tls' ? 'selected' : '' }}>TLS</option>
-                        <option value="ssl" {{ ($mailData['mail_encryption'] ?? 'tls') == 'ssl' ? 'selected' : '' }}>SSL</option>
-                        <option value="none" {{ ($mailData['mail_encryption'] ?? 'tls') == 'none' ? 'selected' : '' }}>None</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="col-md-4">
+            <div class="col-md-6">
                 <label class="form-label fw-semibold text-secondary small" for="mail_username">Username</label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="bi bi-person"></i></span>
@@ -68,7 +52,19 @@
                 </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-4">
+                <label class="form-label fw-semibold text-secondary small" for="mail_encryption">Encryption</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-shield-lock"></i></span>
+                    <select class="form-select" id="mail_encryption" name="mail_encryption">
+                        <option value="tls" {{ ($mailData['mail_encryption'] ?? 'tls') == 'tls' ? 'selected' : '' }}>TLS</option>
+                        <option value="ssl" {{ ($mailData['mail_encryption'] ?? 'tls') == 'ssl' ? 'selected' : '' }}>SSL</option>
+                        <option value="none" {{ ($mailData['mail_encryption'] ?? 'tls') == 'none' ? 'selected' : '' }}>None</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="col-md-4">
                 <label class="form-label fw-semibold text-secondary small" for="mail_from_address">From Email Address</label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="bi bi-envelope"></i></span>
@@ -76,7 +72,7 @@
                 </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-4">
                 <label class="form-label fw-semibold text-secondary small" for="mail_from_name">From Sender Name</label>
                 <div class="input-group">
                     <span class="input-group-text"><i class="bi bi-card-text"></i></span>
@@ -86,7 +82,7 @@
 
             <div class="col-12">
                 <button type="submit" class="btn btn-primary px-4 py-2" id="email-settings-btn">
-                    <i class="bi bi-check-lg me-1"></i> Save Email Settings
+                    <i class="bi bi-check-lg me-1"></i> Save Mail Settings
                 </button>
             </div>
         </form>

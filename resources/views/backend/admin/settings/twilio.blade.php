@@ -1,15 +1,10 @@
 <div class="card settings-card mb-4">
     <div class="card-header d-flex align-items-center">
-        <i class="bi bi-chat-text-fill fs-4 me-2 text-primary"></i>
-        <div>
-            <h5 class="mb-0 fw-bold">Twilio SMS Settings</h5>
-            <small class="text-muted">Configure Twilio API credentials for sending SMS notifications and alerts.</small>
-        </div>
+        <h5 class="mb-0 fw-bold"><i class="bi bi-chat-dots-fill fs-4 me-2 text-primary"></i> Twilio SMS API Settings</h5>
     </div>
     <div class="card-body">
         <form method="POST" action="{{ route('admin.settings.twilio') }}" id="twilio-settings-form" class="row g-4">
             @csrf
-
 
             <div class="col-md-6">
                 <label class="form-label fw-semibold text-secondary small" for="twilio_account_sid">Twilio Account SID</label>

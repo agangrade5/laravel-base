@@ -160,9 +160,21 @@ document.addEventListener('DOMContentLoaded', function () {
     function runSystemAction(button) {
         button.disabled = true;
         const originalHtml = button.innerHTML;
-        button.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Running...';
+        //button.innerHTML = '<span class="spinner-border spinner-border-sm me-1"></span> Running...';
 
         let willRedirect = false;
+
+        // Show Processing popup
+        Swal.fire({
+            title: 'Processing',
+            text: 'Please wait...',
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            showConfirmButton: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
 
         fetch(button.dataset.url, {
             method: 'POST',
@@ -182,6 +194,9 @@ document.addEventListener('DOMContentLoaded', function () {
             if (!ok || !data.status) {
                 throw new Error(data.message || 'Action failed.');
             }
+
+            // Close Processing popup
+            Swal.close();
 
             toastr.success(data.message);
 

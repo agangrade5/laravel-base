@@ -194,7 +194,7 @@ body {
 }
 
 .sidebar-brand {
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+    border-bottom: 1px solid rgba(108, 117, 125, 1) !important;
     padding: 1.25rem 1rem !important;
 }
 .sidebar-brand .brand-link {

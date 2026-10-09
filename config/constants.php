@@ -12,7 +12,13 @@ return [
      * Dropdown option lists for General Settings
      */
     'general_options' => [
-        'pagination_limit' => [ 5, 10, 15, 20, 25],
+        'pagination_limit' => [
+            5 => '5 items per page',
+            10 => '10 items per page',
+            15 => '15 items per page',
+            20 => '20 items per page',
+            25 => '25 items per page',
+        ],
         'password_reset_expiry' => [
             1    => '1 Minute',
             5    => '5 Minutes',

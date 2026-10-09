@@ -1,10 +1,6 @@
 <div class="card settings-card mb-4">
     <div class="card-header d-flex align-items-center">
-        <i class="bi bi-shield-lock-fill fs-4 me-2 text-primary"></i>
-        <div>
-            <h5 class="mb-0 fw-bold">Change Password</h5>
-            <small class="text-muted">Ensure your account is using a secure password</small>
-        </div>
+        <h5 class="mb-0 fw-bold"><i class="bi bi-key-fill fs-4 me-2 text-primary"></i> Change Password</h5>
     </div>
     <div class="card-body">
         <form

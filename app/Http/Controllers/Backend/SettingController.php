@@ -423,7 +423,7 @@ class SettingController extends Controller
      */
     public function updateGeneralSettings(Request $request): JsonResponse
     {
-        $paginationOptions = implode(',', config('constants.general_options.pagination_limit', []));
+        $paginationOptions = implode(',', array_keys(config('constants.general_options.pagination_limit', [])));
         $expiryOptions = implode(',', array_keys(config('constants.general_options.password_reset_expiry', [])));
 
         $validated = $request->validate([

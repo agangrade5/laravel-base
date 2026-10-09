@@ -15,7 +15,7 @@
                     role="button"
                     aria-label="Toggle sidebar"
                 >
-                    <i class="bi bi-list"></i>
+                    <i class="bi bi-list fs-5"></i>
                 </a>
             </li>
         </ul>
