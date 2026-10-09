@@ -58,363 +58,6 @@ class SettingController extends Controller
     }
 
     /**
-     * Update OTP settings in database settings table.
-     *
-     * @param OtpSettingRequest $request
-     *
-     * @return JsonResponse
-     */
-    public function updateOtpSettings(OtpSettingRequest $request): JsonResponse
-    {
-        $validated = $request->validated();
-        $existingOtp = $this->settingRepository->getSettingArray('otp');
-
-        $payload = [
-            'max_time' => (int) $validated['otp_max_time'],
-            'otp_length' => (int) $validated['otp_length'],
-            'is_default' => (bool) $validated['otp_is_default'],
-            'default' => (string) ( $validated['otp_default'] ?? $existingOtp['default'] ?? '' ),
-        ];
-
-        $setting =   $this->settingRepository->saveSetting('otp', $payload);
-        /*
-        |--------------------------------------------------------------------------
-        | Activity Log
-        |--------------------------------------------------------------------------
-        */
-        UtilityHelper::customActivityLog(
-            'Setting',
-            'Updated OTP Settings successfully.',
-            $setting,
-            [
-                'ip' => $request->ip(),
-                'user_agent' => $request->userAgent(),
-            ]
-        );
-
-        $setting = $this->settingRepository->saveSetting('otp', $payload);
-        /*
-        |--------------------------------------------------------------------------
-        | Activity Log
-        |--------------------------------------------------------------------------
-        */
-        UtilityHelper::customActivityLog(
-            'Setting',
-            'Updated OTP Settings successfully.',
-            $setting,
-            [
-                'ip' => $request->ip(),
-                'user_agent' => $request->userAgent(),
-            ]
-        );
-
-        return response()->json([
-            'status' => true,
-            'message' => 'OTP Settings updated successfully!',
-            'data' => $payload,
-        ]);
-    }
-
-    /**
-     * Update Twilio settings in database settings table.
-     *
-     * @param TwilioSettingRequest $request
-     *
-     * @return JsonResponse
-     */
-    public function updateTwilioSettings(TwilioSettingRequest $request): JsonResponse
-    {
-        $validated = $request->validated();
-        $existingTwilio = $this->settingRepository->getSettingArray('twilio');
-
-        $rawToken = (string) ($validated['twilio_auth_token'] ?? '');
-        if (!empty($rawToken)) {
-            $twilioAuthToken = Crypt::encryptString($rawToken);
-        } else {
-            $twilioAuthToken = $existingTwilio['twilio_auth_token'] ?? '';
-        }
-
-        $payload = [
-            'twilio_account_sid' => (string) ($validated['twilio_account_sid'] ?? ''),
-            'twilio_auth_token' => $twilioAuthToken,
-            'twilio_from_number' => (string) ($validated['twilio_from_number'] ?? ''),
-        ];
-
-        $setting = $this->settingRepository->saveSetting('twilio', $payload);
-        /*
-        |--------------------------------------------------------------------------
-        | Activity Log
-        |--------------------------------------------------------------------------
-        */
-        UtilityHelper::customActivityLog(
-            'Setting',
-            'Updated Twilio SMS Settings successfully.',
-            $setting,
-            [
-                'ip' => $request->ip(),
-                'user_agent' => $request->userAgent(),
-            ]
-        );
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Twilio SMS Settings updated successfully!',
-            'data' => $payload,
-        ]);
-    }
-
-    /**
-     * Update Email (SMTP) settings in database settings table.
-     *
-     * @param EmailSettingRequest $request
-     *
-     * @return JsonResponse
-     */
-    public function updateEmailSettings(EmailSettingRequest $request): JsonResponse
-    {
-        $validated = $request->validated();
-        $existingEmail = $this->settingRepository->getSettingArray('mail');
-
-        $rawPassword = (string) ($validated['mail_password'] ?? '');
-        if (!empty($rawPassword)) {
-            $mailPassword = Crypt::encryptString($rawPassword);
-        } else {
-            $mailPassword = $existingEmail['mail_password'] ?? '';
-        }
-
-        $payload = [
-            'mail_mailer' => (string) ($validated['mail_mailer'] ?? 'smtp'),
-            'mail_host' => (string) ($validated['mail_host'] ?? ''),
-            'mail_port' => (string) ($validated['mail_port'] ?? '587'),
-            'mail_encryption' => (string) ($validated['mail_encryption'] ?? 'tls'),
-            'mail_username' => (string) ($validated['mail_username'] ?? ''),
-            'mail_password' => $mailPassword,
-            'mail_from_address' => (string) ($validated['mail_from_address'] ?? ''),
-            'mail_from_name' => (string) ($validated['mail_from_name'] ?? ''),
-        ];
-
-        $setting = $this->settingRepository->saveSetting('mail', $payload);
-        /*
-        |--------------------------------------------------------------------------
-        | Activity Log
-        |--------------------------------------------------------------------------
-        */
-        UtilityHelper::customActivityLog(
-            'Setting',
-            'Updated Email (SMTP) Settings successfully.',
-            $setting,
-            [
-                'ip' => $request->ip(),
-                'user_agent' => $request->userAgent(),
-            ]
-        );
-
-        return response()->json([
-            'status' => true,
-            'message' => 'Email (SMTP) Settings updated successfully!',
-            'data' => $payload,
-        ]);
-    }
-
-    /**
-     * Update AWS Cloud settings in database settings table.
-     *
-     * @param AwsSettingRequest $request
-     *
-     * @return JsonResponse
-     */
-    public function updateAwsSettings(AwsSettingRequest $request): JsonResponse
-    {
-        $validated = $request->validated();
-        $existingAws = $this->settingRepository->getSettingArray('aws');
-
-        $rawSecret = (string) ($validated['aws_secret_access_key'] ?? '');
-        if (!empty($rawSecret)) {
-            $awsSecretKey = Crypt::encryptString($rawSecret);
-        } else {
-            $awsSecretKey = $existingAws['aws_secret_access_key'] ?? '';
-        }
-
-        $payload = [
-            'aws_access_key_id' => (string) ($validated['aws_access_key_id'] ?? ''),
-            'aws_secret_access_key' => $awsSecretKey,
-            'aws_default_region' => (string) ($validated['aws_default_region'] ?? 'us-east-1'),
-            'aws_bucket' => (string) ($validated['aws_bucket'] ?? ''),
-        ];
-
-        $setting = $this->settingRepository->saveSetting('aws', $payload);
-        /*
-        |--------------------------------------------------------------------------
-        | Activity Log
-        |--------------------------------------------------------------------------
-        */
-        UtilityHelper::customActivityLog(
-            'Setting',
-            'Updated AWS Cloud Settings successfully.',
-            $setting,
-            [
-                'ip' => $request->ip(),
-                'user_agent' => $request->userAgent(),
-            ]
-        );
-
-        return response()->json([
-            'status' => true,
-            'message' => 'AWS Cloud Settings updated successfully!',
-            'data' => $payload,
-        ]);
-    }
-
-    /**
-     * Setup 2FA for the user.
-     *
-     * @return JsonResponse
-     */
-    public function twoFaSetup(): JsonResponse
-    {
-        $user = Auth::user();
-
-        $secret = $this->googleTwoFactorService->generateSecretKey();
-
-        session(['2fa_setup_secret' => $secret]);
-
-        $qrCodeSvg = $this->googleTwoFactorService->getQrCodeSvg(
-            config('app.name'),
-            $user->email,
-            $secret
-        );
-
-        /*
-        |--------------------------------------------------------------------------
-        | Activity Log
-        |--------------------------------------------------------------------------
-        */
-        UtilityHelper::customActivityLog(
-            'Setting',
-            'Setup 2FA for user: ' . $user->name,
-            $user,
-            [
-                'user_id' => $user->id,
-                'user_name' => $user->name,
-                'ip' => request()->ip(),
-                'user_agent' => request()->userAgent(),
-            ]
-        );
-
-        return response()->json([
-            'success' => true,
-            'qr_code' => $qrCodeSvg,
-            'secret' => $secret,
-        ]);
-    }
-
-    /**
-     * Enable 2FA for the user.
-     *
-     * @param EnableGoogle2faRequest $request
-     *
-     * @return JsonResponse
-     */
-    public function twoFaEnable(EnableGoogle2faRequest $request): JsonResponse
-    {
-        $secret = session('2fa_setup_secret');
-
-        if (!$secret) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Setup session expired, please scan the QR code again.',
-            ], 422);
-        }
-
-        $isValid = $this->googleTwoFactorService->verifyKey(
-            $secret,
-            $request->input('one_time_password')
-        );
-
-        if (!$isValid) {
-            return response()->json([
-                'success' => false,
-                'message' => 'The code you entered is incorrect.',
-            ], 422);
-        }
-
-        $user = Auth::user();
-        $user->google2fa_secret = $secret;
-        $user->google2fa_enabled = true;
-        $user->google2fa_enabled_at = now();
-        $user->save();
-
-        session()->forget('2fa_setup_secret');
-
-        /*
-        |--------------------------------------------------------------------------
-        | Activity Log
-        |--------------------------------------------------------------------------
-        */
-        UtilityHelper::customActivityLog(
-            'Auth',
-            'Google 2FA enabled.',
-            $user,
-                [
-                    'user_id' => $user->id,
-                    'email' => $user->email,
-                    'ip' => $request->ip(),
-                    'user_agent' => $request->userAgent(),
-                ]
-        );
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Google Authenticator has been enabled for your account.',
-        ]);
-    }
-
-    /**
-     * Disable 2FA for the user.
-     *
-     * @param Request $request
-     *
-     * @return JsonResponse
-     */
-    public function twoFaDisable(Request $request): JsonResponse
-    {
-        $request->validate([
-            'password' => [
-                'required',
-                'current_password:web',
-            ],
-        ]);
-
-        $user = Auth::user();
-        $user->google2fa_secret = null;
-        $user->google2fa_enabled = false;
-        $user->google2fa_enabled_at = null;
-        $user->save();
-
-        /*
-        |--------------------------------------------------------------------------
-        | Activity Log
-        |--------------------------------------------------------------------------
-        */
-        UtilityHelper::customActivityLog(
-            'Auth',
-            'Google 2FA disabled.',
-            $user,
-                [
-                    'user_id' => $user->id,
-                    'email' => $user->email,
-                    'ip' => $request->ip(),
-                    'user_agent' => $request->userAgent(),
-                ]
-        );
-
-        return response()->json([
-            'success' => true,
-            'message' => 'Google Authenticator has been disabled for your account.',
-        ]);
-    }
-
-    /**
      * Update general settings (pagination limit / password reset expiry) via AJAX.
      *
      * @param Request $request
@@ -741,5 +384,362 @@ class SettingController extends Controller
                 'message' => 'Migrate fresh with seed failed: ' . $e->getMessage(),
             ], 500);
         }
+    }
+
+    /**
+     * Setup 2FA for the user.
+     *
+     * @return JsonResponse
+     */
+    public function twoFaSetup(): JsonResponse
+    {
+        $user = Auth::user();
+
+        $secret = $this->googleTwoFactorService->generateSecretKey();
+
+        session(['2fa_setup_secret' => $secret]);
+
+        $qrCodeSvg = $this->googleTwoFactorService->getQrCodeSvg(
+            config('app.name'),
+            $user->email,
+            $secret
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Activity Log
+        |--------------------------------------------------------------------------
+        */
+        UtilityHelper::customActivityLog(
+            'Setting',
+            'Setup 2FA for user: ' . $user->name,
+            $user,
+            [
+                'user_id' => $user->id,
+                'user_name' => $user->name,
+                'ip' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+            ]
+        );
+
+        return response()->json([
+            'success' => true,
+            'qr_code' => $qrCodeSvg,
+            'secret' => $secret,
+        ]);
+    }
+
+    /**
+     * Enable 2FA for the user.
+     *
+     * @param EnableGoogle2faRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function twoFaEnable(EnableGoogle2faRequest $request): JsonResponse
+    {
+        $secret = session('2fa_setup_secret');
+
+        if (!$secret) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Setup session expired, please scan the QR code again.',
+            ], 422);
+        }
+
+        $isValid = $this->googleTwoFactorService->verifyKey(
+            $secret,
+            $request->input('one_time_password')
+        );
+
+        if (!$isValid) {
+            return response()->json([
+                'success' => false,
+                'message' => 'The code you entered is incorrect.',
+            ], 422);
+        }
+
+        $user = Auth::user();
+        $user->google2fa_secret = $secret;
+        $user->google2fa_enabled = true;
+        $user->google2fa_enabled_at = now();
+        $user->save();
+
+        session()->forget('2fa_setup_secret');
+
+        /*
+        |--------------------------------------------------------------------------
+        | Activity Log
+        |--------------------------------------------------------------------------
+        */
+        UtilityHelper::customActivityLog(
+            'Auth',
+            'Google 2FA enabled.',
+            $user,
+                [
+                    'user_id' => $user->id,
+                    'email' => $user->email,
+                    'ip' => $request->ip(),
+                    'user_agent' => $request->userAgent(),
+                ]
+        );
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Google Authenticator has been enabled for your account.',
+        ]);
+    }
+
+    /**
+     * Disable 2FA for the user.
+     *
+     * @param Request $request
+     *
+     * @return JsonResponse
+     */
+    public function twoFaDisable(Request $request): JsonResponse
+    {
+        $request->validate([
+            'password' => [
+                'required',
+                'current_password:web',
+            ],
+        ]);
+
+        $user = Auth::user();
+        $user->google2fa_secret = null;
+        $user->google2fa_enabled = false;
+        $user->google2fa_enabled_at = null;
+        $user->save();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Activity Log
+        |--------------------------------------------------------------------------
+        */
+        UtilityHelper::customActivityLog(
+            'Auth',
+            'Google 2FA disabled.',
+            $user,
+                [
+                    'user_id' => $user->id,
+                    'email' => $user->email,
+                    'ip' => $request->ip(),
+                    'user_agent' => $request->userAgent(),
+                ]
+        );
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Google Authenticator has been disabled for your account.',
+        ]);
+    }
+
+    /**
+     * Update Email (SMTP) settings in database settings table.
+     *
+     * @param EmailSettingRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function updateEmailSettings(EmailSettingRequest $request): JsonResponse
+    {
+        $validated = $request->validated();
+        $existingEmail = $this->settingRepository->getSettingArray('mail');
+
+        $rawPassword = (string) ($validated['mail_password'] ?? '');
+        if (!empty($rawPassword)) {
+            $mailPassword = Crypt::encryptString($rawPassword);
+        } else {
+            $mailPassword = $existingEmail['mail_password'] ?? '';
+        }
+
+        $payload = [
+            'mail_mailer' => (string) ($validated['mail_mailer'] ?? 'smtp'),
+            'mail_host' => (string) ($validated['mail_host'] ?? ''),
+            'mail_port' => (string) ($validated['mail_port'] ?? '587'),
+            'mail_encryption' => (string) ($validated['mail_encryption'] ?? 'tls'),
+            'mail_username' => (string) ($validated['mail_username'] ?? ''),
+            'mail_password' => $mailPassword,
+            'mail_from_address' => (string) ($validated['mail_from_address'] ?? ''),
+            'mail_from_name' => (string) ($validated['mail_from_name'] ?? ''),
+        ];
+
+        $setting = $this->settingRepository->saveSetting('mail', $payload);
+        /*
+        |--------------------------------------------------------------------------
+        | Activity Log
+        |--------------------------------------------------------------------------
+        */
+        UtilityHelper::customActivityLog(
+            'Setting',
+            'Updated Email (SMTP) Settings successfully.',
+            $setting,
+            [
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ]
+        );
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Email (SMTP) Settings updated successfully!',
+            'data' => $payload,
+        ]);
+    }
+
+    /**
+     * Update OTP settings in database settings table.
+     *
+     * @param OtpSettingRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function updateOtpSettings(OtpSettingRequest $request): JsonResponse
+    {
+        $validated = $request->validated();
+        $existingOtp = $this->settingRepository->getSettingArray('otp');
+
+        $payload = [
+            'max_time' => (int) $validated['otp_max_time'],
+            'otp_length' => (int) $validated['otp_length'],
+            'is_default' => (bool) $validated['otp_is_default'],
+            'default' => (string) ( $validated['otp_default'] ?? $existingOtp['default'] ?? '' ),
+        ];
+
+        $setting =   $this->settingRepository->saveSetting('otp', $payload);
+        /*
+        |--------------------------------------------------------------------------
+        | Activity Log
+        |--------------------------------------------------------------------------
+        */
+        UtilityHelper::customActivityLog(
+            'Setting',
+            'Updated OTP Settings successfully.',
+            $setting,
+            [
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ]
+        );
+
+        $setting = $this->settingRepository->saveSetting('otp', $payload);
+        /*
+        |--------------------------------------------------------------------------
+        | Activity Log
+        |--------------------------------------------------------------------------
+        */
+        UtilityHelper::customActivityLog(
+            'Setting',
+            'Updated OTP Settings successfully.',
+            $setting,
+            [
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ]
+        );
+
+        return response()->json([
+            'status' => true,
+            'message' => 'OTP Settings updated successfully!',
+            'data' => $payload,
+        ]);
+    }
+
+    /**
+     * Update Twilio settings in database settings table.
+     *
+     * @param TwilioSettingRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function updateTwilioSettings(TwilioSettingRequest $request): JsonResponse
+    {
+        $validated = $request->validated();
+        $existingTwilio = $this->settingRepository->getSettingArray('twilio');
+
+        $rawToken = (string) ($validated['twilio_auth_token'] ?? '');
+        if (!empty($rawToken)) {
+            $twilioAuthToken = Crypt::encryptString($rawToken);
+        } else {
+            $twilioAuthToken = $existingTwilio['twilio_auth_token'] ?? '';
+        }
+
+        $payload = [
+            'twilio_account_sid' => (string) ($validated['twilio_account_sid'] ?? ''),
+            'twilio_auth_token' => $twilioAuthToken,
+            'twilio_from_number' => (string) ($validated['twilio_from_number'] ?? ''),
+        ];
+
+        $setting = $this->settingRepository->saveSetting('twilio', $payload);
+        /*
+        |--------------------------------------------------------------------------
+        | Activity Log
+        |--------------------------------------------------------------------------
+        */
+        UtilityHelper::customActivityLog(
+            'Setting',
+            'Updated Twilio SMS Settings successfully.',
+            $setting,
+            [
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ]
+        );
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Twilio SMS Settings updated successfully!',
+            'data' => $payload,
+        ]);
+    }
+
+    /**
+     * Update AWS Cloud settings in database settings table.
+     *
+     * @param AwsSettingRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function updateAwsSettings(AwsSettingRequest $request): JsonResponse
+    {
+        $validated = $request->validated();
+        $existingAws = $this->settingRepository->getSettingArray('aws');
+
+        $rawSecret = (string) ($validated['aws_secret_access_key'] ?? '');
+        if (!empty($rawSecret)) {
+            $awsSecretKey = Crypt::encryptString($rawSecret);
+        } else {
+            $awsSecretKey = $existingAws['aws_secret_access_key'] ?? '';
+        }
+
+        $payload = [
+            'aws_access_key_id' => (string) ($validated['aws_access_key_id'] ?? ''),
+            'aws_secret_access_key' => $awsSecretKey,
+            'aws_default_region' => (string) ($validated['aws_default_region'] ?? 'us-east-1'),
+            'aws_bucket' => (string) ($validated['aws_bucket'] ?? ''),
+        ];
+
+        $setting = $this->settingRepository->saveSetting('aws', $payload);
+        /*
+        |--------------------------------------------------------------------------
+        | Activity Log
+        |--------------------------------------------------------------------------
+        */
+        UtilityHelper::customActivityLog(
+            'Setting',
+            'Updated AWS Cloud Settings successfully.',
+            $setting,
+            [
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ]
+        );
+
+        return response()->json([
+            'status' => true,
+            'message' => 'AWS Cloud Settings updated successfully!',
+            'data' => $payload,
+        ]);
     }
 }
