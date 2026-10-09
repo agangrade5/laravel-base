@@ -249,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (window.toastr) {
                 toastr.success(
-                    'Profile picture cropped successfully.'
+                    'Profile image cropped successfully! Click "Update Profile" to save.'
                 );
             }
 

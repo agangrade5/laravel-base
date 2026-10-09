@@ -43,7 +43,7 @@
                 <div class="card mb-4">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <div>
-                            <h5 class="mb-0 fw-bold">Recent System Logs</h5>
+                            <h6 class="mb-0 fw-bold"><i class="bi bi-activity me-1 text-danger"></i> Recent System Logs</h6>
                             <small class="text-muted">Latest server updates</small>
                         </div>
                         @can('activity-logs.view-all')
@@ -154,7 +154,7 @@
                 <!-- Quick Action & Administration Tools -->
                 <div class="card border-0 shadow-sm rounded-4 mb-4">
                     <div class="card-header border-0 py-3">
-                        <h6 class="mb-0 fw-bold text-body-emphasis">Quick Actions</h6>
+                        <h6 class="mb-0 fw-bold text-body-emphasis"><i class="bi bi-grid-fill me-1 text-primary"></i> Quick Module Shortcuts</h6>
                         <small class="text-muted">Common administrative shortcuts</small>
                     </div>
                     <div class="card-body pt-0">
@@ -174,7 +174,7 @@
 
                             <a href="{{ route('admin.settings.index') }}" class="quick-action-link p-3 rounded-3 d-flex align-items-center justify-content-between">
                                 <div class="d-flex align-items-center gap-3">
-                                    <div class="quick-action-icon bg-secondary-subtle text-secondary rounded-3 d-flex align-items-center justify-content-center">
+                                    <div class="quick-action-icon bg-primary-subtle text-primary rounded-3 d-flex align-items-center justify-content-center">
                                         <i class="bi bi-gear-fill fs-5"></i>
                                     </div>
                                     <div>
