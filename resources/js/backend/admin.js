@@ -44,9 +44,7 @@ toastr.options = {
 // ========================================
 // SweetAlert Confirmation
 // ========================================
-
-function showConfirmation(button, callback) {
-
+window.showConfirmation = function (button, callback) {
     Swal.fire({
         title: button.dataset.confirmTitle || 'Are you sure?',
         text: button.dataset.confirmText || "You won't be able to revert this!",
@@ -61,15 +59,37 @@ function showConfirmation(button, callback) {
         //buttonsStyling: false,
         reverseButtons: true
     }).then((result) => {
-
         if (result.isConfirmed && callback) {
             callback();
         }
 
     });
 }
-// Add to window
-window.showConfirmation = showConfirmation;
+
+// ========================================
+// Processing Popup
+// ========================================
+window.showProcessingPopup = function (title=null, text=null) {
+    // Show Processing popup
+    Swal.fire({
+        title: title || 'Processing',
+        text: text || 'Please wait...',
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        showConfirmButton: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+}
+
+// ========================================
+// Processing Popup
+// ========================================
+window.closeProcessingPopup = function () {
+    // Close Processing popup
+    Swal.close();
+}
 
 // ========================================
 // Logout Confirmation
@@ -233,7 +253,6 @@ document.addEventListener('DOMContentLoaded', () => {
 // ========================================
 // Generic Delete Record (AJAX)
 // ========================================
-
 document.addEventListener('click', function (event) {
     const button = event.target.closest('.delete-record-btn');
 

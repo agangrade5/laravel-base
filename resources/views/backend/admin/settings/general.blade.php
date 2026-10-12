@@ -19,7 +19,6 @@
                 @endforeach
             </select>
             <small class="text-muted">Controls how many rows appear on table listings.</small>
-            {{-- <span id="pagination-limit-status" class="small text-muted"></span> --}}
         </div>
 
         {{-- Password Reset Link Expiry --}}
@@ -38,7 +37,6 @@
                 @endforeach
             </select>
             <small class="text-muted">Expiration duration for password reset tokens generated via email.</small>
-            {{-- <span id="password-reset-expiry-status" class="small text-muted"></span> --}}
         </div>
 
         {{-- Maintenance Mode --}}
@@ -54,7 +52,6 @@
                 <option value="1" {{ app()->isDownForMaintenance() ? 'selected' : '' }}>On (Maintenance)</option>
             </select>
             <small class="text-muted">Enables or disables maintenance mode.</small>
-            {{-- <span id="maintenance-mode-status" class="small text-muted"></span> --}}
         </div>
     </div>
 </div>

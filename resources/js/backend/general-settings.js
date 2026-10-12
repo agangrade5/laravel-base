@@ -1,10 +1,8 @@
 document.addEventListener('DOMContentLoaded', function () {
 
     /* Pagination Limit & Password Reset Expiry */
-    function bindAjaxSelect(selectId, statusId, fieldName) {
+    function bindAjaxSelect(selectId, fieldName) {
         const select = document.getElementById(selectId);
-        const statusEl = document.getElementById(statusId);
-
         if (!select) {
             return;
         }
@@ -14,9 +12,9 @@ document.addEventListener('DOMContentLoaded', function () {
             const value = select.value;
 
             select.disabled = true;
-            if (statusEl) {
-                statusEl.textContent = 'Saving...';
-            }
+
+            // Show Processing popup
+            showProcessingPopup('Processing', 'Please wait...');
 
             fetch(url, {
                 method: 'POST',
@@ -37,16 +35,14 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (!ok || !data.status) {
                     throw new Error(data.message || 'Unable to update setting.');
                 }
+
+                // Close Processing popup
+                closeProcessingPopup();
+
                 toastr.success(data.message);
-                if (statusEl) {
-                    statusEl.textContent = '';
-                }
             })
             .catch(function (error) {
                 toastr.error(error.message || 'Something went wrong.');
-                if (statusEl) {
-                    statusEl.textContent = '';
-                }
             })
             .finally(function () {
                 select.disabled = false;
@@ -54,12 +50,11 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    bindAjaxSelect('pagination-limit-select', 'pagination-limit-status', 'pagination_limit');
-    bindAjaxSelect('password-reset-expiry-select', 'password-reset-expiry-status', 'password_reset_expiry');
+    bindAjaxSelect('pagination-limit-select', 'pagination_limit');
+    bindAjaxSelect('password-reset-expiry-select', 'password_reset_expiry');
 
     /* Maintenance Mode */
     const maintenanceSelect = document.getElementById('maintenance-mode-select');
-    const maintenanceStatusEl = document.getElementById('maintenance-mode-status');
 
     if (!maintenanceSelect) {
         return;
@@ -72,9 +67,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
         function proceed() {
             maintenanceSelect.disabled = true;
-            if (maintenanceStatusEl) {
-                maintenanceStatusEl.textContent = 'Updating...';
-            }
+
+            // Show Processing popup
+            showProcessingPopup('Processing', 'Please wait...');
 
             fetch(url, {
                 method: 'POST',
@@ -95,10 +90,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 if (!ok || !data.status) {
                     throw new Error(data.message || 'Unable to update maintenance mode.');
                 }
+
+                // Close Processing popup
+                closeProcessingPopup();
+
                 toastr.success(data.message);
-                if (maintenanceStatusEl) {
-                    maintenanceStatusEl.textContent = '';
-                }
 
                 // show bypass link
                 if (turningOn && data.bypass_url) {
@@ -113,9 +109,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 toastr.error(error.message || 'Something went wrong.');
                 // revert dropdown on failure
                 maintenanceSelect.value = turningOn ? '0' : '1';
-                if (maintenanceStatusEl) {
-                    maintenanceStatusEl.textContent = '';
-                }
             })
             .finally(function () {
                 maintenanceSelect.disabled = false;
@@ -133,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     confirmButton: 'btn btn-warning',
                     cancelButton: 'btn btn-secondary'
                 },
-                buttonsStyling: false
+                /* buttonsStyling: false */
             }).then(function (result) {
                 if (result.isConfirmed) {
                     proceed();
@@ -149,11 +142,9 @@ document.addEventListener('DOMContentLoaded', function () {
     /* System Actions */
     document.querySelectorAll('.system-action-btn').forEach(function (button) {
         button.addEventListener('click', function () {
-
             showConfirmation(button, function () {
                 runSystemAction(button);
             });
-
         });
     });
 
@@ -165,16 +156,7 @@ document.addEventListener('DOMContentLoaded', function () {
         let willRedirect = false;
 
         // Show Processing popup
-        Swal.fire({
-            title: 'Processing',
-            text: 'Please wait...',
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            showConfirmButton: false,
-            didOpen: () => {
-                Swal.showLoading();
-            }
-        });
+        showProcessingPopup('Processing', 'Please wait...');
 
         fetch(button.dataset.url, {
             method: 'POST',
@@ -196,7 +178,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }
 
             // Close Processing popup
-            Swal.close();
+            closeProcessingPopup();
 
             toastr.success(data.message);
 
