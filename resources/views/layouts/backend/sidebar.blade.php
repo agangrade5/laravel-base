@@ -34,20 +34,29 @@
             >
                 <li class="nav-item">
                     <a href="{{ route('admin.dashboard') }}" class="nav-link {{ request()->routeIs('admin.dashboard') ? 'active' : '' }}">
-                        <i class="nav-icon bi bi-speedometer"></i>
-                        <p>Dashboard</p>
+                        <i class="nav-icon bi bi-speedometer"></i>Dashboard
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('admin.users.index') }}" class="nav-link {{ request()->routeIs('admin.users.index') ? 'active' : '' }}">
-                        <i class="nav-icon bi bi-people"></i>
-                        <p>Users</p>
+                        <i class="nav-icon bi bi-people"></i>Users
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('admin.settings.index') }}" class="nav-link {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
-                        <i class="nav-icon bi bi-gear"></i>
-                        <p>Settings</p>
+                        <i class="nav-icon bi bi-gear"></i>Settings
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('log-viewer.index') }}" class="nav-link" target="_blank" >
+                        <i class="nav-icon bi bi-file-earmark-text"></i>System Logs
+                        <i class="bi bi-box-arrow-up-right small ms-1"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ asset('swagger/index.html') }}" class="nav-link" target="_blank" >
+                        <i class="nav-icon bi bi-braces"></i>Swagger API
+                        <i class="bi bi-box-arrow-up-right small ms-1"></i>
                     </a>
                 </li>
             </ul>
@@ -63,14 +72,12 @@
             >
                 <li class="nav-item">
                     <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
-                        <i class="nav-icon bi bi-speedometer"></i>
-                        <p>Dashboard</p>
+                        <i class="nav-icon bi bi-speedometer"></i>Dashboard
                     </a>
                 </li>
                 <li class="nav-item">
                     <a href="{{ route('settings.index') }}" class="nav-link {{ request()->routeIs('settings.*') ? 'active' : '' }}">
-                        <i class="nav-icon bi bi-gear"></i>
-                        <p>Settings</p>
+                        <i class="nav-icon bi bi-gear"></i>Settings
                     </a>
                 </li>
             </ul>
