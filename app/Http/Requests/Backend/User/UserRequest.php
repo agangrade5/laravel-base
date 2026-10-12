@@ -5,6 +5,7 @@ namespace App\Http\Requests\Backend\User;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 use App\Rules\{NoScripts, ValidEmailDomain, ValidUrl, WithoutSpacesRule, StrictPasswordRule};
+use Closure;
 
 class UserRequest extends FormRequest
 {
