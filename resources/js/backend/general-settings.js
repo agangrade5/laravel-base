@@ -52,6 +52,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
     bindAjaxSelect('pagination-limit-select', 'pagination_limit');
     bindAjaxSelect('password-reset-expiry-select', 'password_reset_expiry');
+    bindAjaxSelect('date_time_format_select', 'date_time_format');
 
     /* Maintenance Mode */
     const maintenanceSelect = document.getElementById('maintenance-mode-select');

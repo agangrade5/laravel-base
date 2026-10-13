@@ -39,6 +39,28 @@
             <small class="text-muted">Expiration duration for password reset tokens generated via email.</small>
         </div>
 
+        {{-- Date & Time Format --}}
+        @php
+            $selectedFormat = $generalData['date_time_format']
+                ?? config('constants.settings.general.date_time_format');
+        @endphp
+        <div class="mb-3">
+            <label for="date_time_format_select" class="form-label fw-semibold">Date & Time Format</label>
+            <select
+                name="date_time_format"
+                id="date_time_format_select"
+                class="form-select"
+                data-url="{{ route('admin.settings.general') }}"
+            >
+                @foreach(config('constants.general_options.date_time_format', []) as $format => $label)
+                    <option value="{{ $format }}" {{ $selectedFormat === $format ? 'selected' : '' }}>
+                        @datetime(now(), $format)
+                    </option>
+                @endforeach
+            </select>
+            <small class="text-muted">Format used for dates and times in listings.</small>
+        </div>
+
         {{-- Maintenance Mode --}}
         <div class="mb-3">
             <label for="maintenance_mode" class="form-label fw-semibold">Maintenance Mode</label>

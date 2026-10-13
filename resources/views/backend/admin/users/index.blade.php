@@ -106,13 +106,7 @@
                                             </td>
                                             <!-- Mobile Number -->
                                             <td>
-                                                {{-- <img
-                                                    src="{{ asset('assets/images/flags/' . $user['country_iso'] . '.svg') }}"
-                                                    width="18"
-                                                    height="14"
-                                                    alt="{{ $user['country_iso'] }}"
-                                                    class="rounded-1 border shadow-xs flex-shrink-0"
-                                                > --}} {{ $user['country_code'] }}-{{ $user['phone_number'] }}
+                                                {{ $user['country_code'] }}-{{ $user['phone_number'] }}
                                             </td>
                                             <!-- Email -->
                                             <td>
@@ -120,10 +114,7 @@
                                             </td>
                                             <!-- Created Date -->
                                             <td>
-                                                <span class="small fw-semibold text-secondary d-block"><i class="bi bi-clock me-1"></i>
-                                                    {{ \App\Helpers\UtilityHelper::formatDateTime($user['created_at'], 'd M Y') }}
-                                                </span>
-                                                <small class="text-muted">{{ \App\Helpers\UtilityHelper::formatDateTime($user['created_at'], 'h:i:s A') }}</small>
+                                                @datetime($user['created_at'])
                                             </td>
                                             <!-- Status badge -->
                                             <td>

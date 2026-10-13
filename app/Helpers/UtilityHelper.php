@@ -2,7 +2,6 @@
 
 namespace App\Helpers;
 
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Activitylog\Models\Activity;
 
@@ -63,33 +62,6 @@ class UtilityHelper
     }
 
     /**
-     * Format date time.
-     *
-     * @param mixed $dateTime
-     * @param ?string $format
-     *
-     * @return string
-     */
-    public static function formatDateTime(
-        mixed $dateTime,
-        ?string $format = null
-    ): string {
-        if (empty($dateTime)) {
-            return '';
-        }
-
-        $format ??= config('constants.date_format.admin_display');
-
-        $timezone = auth()->user()?->timezone
-            ?? session('user_timezone')
-            ?? config('app.timezone', 'UTC');
-
-        return Carbon::parse($dateTime)
-            ->timezone($timezone)
-            ->format($format);
-    }
-
-    /**
      * Generate OTP
      *
      * @param array $otpDetails
@@ -113,45 +85,5 @@ class UtilityHelper
         $max = (10 ** $length) - 1;
 
         return (string) random_int($min, $max);
-    }
-
-    /**
-     * Set user timezone.
-     *
-     * @param mixed $user
-     * @param ?string $timezone
-     *
-     * @return void
-     */
-    public static function setUserTimezone(
-        $user,
-        ?string $timezone = null
-    ): void {
-        if (!$timezone) {
-            return;
-        }
-
-        $timezoneAliases = [
-            'Asia/Calcutta' => 'Asia/Kolkata',
-        ];
-
-        $timezone = $timezoneAliases[$timezone] ?? $timezone;
-
-        try {
-            new \DateTimeZone($timezone);
-
-            $user->timezone = $timezone;
-            $user->save();
-
-            session([
-                'user_timezone' => $timezone,
-            ]);
-        } catch (\Exception $e) {
-            // Invalid timezone - keep existing timezone
-            session([
-                'user_timezone' => $user->timezone
-                    ?? config('app.timezone', 'UTC'),
-            ]);
-        }
     }
 }

@@ -5,10 +5,9 @@ use App\Helpers\UtilityHelper;
 use App\Http\Controllers\Controller;
 use App\Repositories\Contracts\{UserRepositoryInterface, SettingRepositoryInterface};
 use Illuminate\View\View;
-use App\Http\Requests\Backend\User\ProfileUpdateRequest;
+use App\Http\Requests\Backend\User\{UserRequest, ProfileUpdateRequest};
 use App\Http\Requests\Backend\Auth\ChangePasswordRequest;
 use Illuminate\Http\{RedirectResponse, JsonResponse};
-use App\Http\Requests\Backend\User\UserRequest;
 use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller

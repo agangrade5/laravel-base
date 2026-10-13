@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\Auth\{ForgotPasswordRequest, ResetPasswordRequest};
 use App\Models\User;
 use App\Repositories\Contracts\UserRepositoryInterface;
+use App\Services\DateTimeService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\{Auth, Log, Password};
 use Illuminate\Support\Str;
@@ -18,9 +19,11 @@ class ForgotPasswordController extends Controller
      * Create a new controller instance.
      *
      * @param UserRepositoryInterface $userRepository
+     * @param DateTimeService $dateTimeService
      */
     public function __construct(
-        protected UserRepositoryInterface $userRepository
+        private readonly UserRepositoryInterface $userRepository,
+        private readonly DateTimeService $dateTimeService
     ) {
     }
 
@@ -210,7 +213,7 @@ class ForgotPasswordController extends Controller
             | Set User Timezone
             |--------------------------------------------------------------------------
             */
-            UtilityHelper::setUserTimezone(
+            $this->dateTimeService->setUserTimezone(
                 $user,
                 $request->input('timezone') ?? null
             );

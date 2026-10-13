@@ -28,6 +28,14 @@ return [
             120  => '2 Hours',
             1440 => '24 Hours',
         ],
+        'date_time_format' => [
+            'd-m-Y h:i:s A' => '',
+            'd M Y, h:i A'  => '',
+            'd-m-Y h:i A'   => '',
+            'm/d/Y h:i A'   => '',
+            'Y-m-d H:i:s'   => '',
+            'd/m/Y H:i'     => '',
+        ],
     ],
 
     /**
@@ -37,6 +45,7 @@ return [
         'general' => [
             'pagination_limit' => 10, // per page
             'password_reset_expiry' => 60, // in minutes
+            'date_time_format' => 'd-m-Y h:i:s A',
         ],
         'twilio' => [
             'enable_twilio' => false,

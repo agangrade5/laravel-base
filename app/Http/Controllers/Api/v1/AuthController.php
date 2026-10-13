@@ -11,7 +11,7 @@ use App\Http\Resources\Api\v1\UserResource;
 use App\Models\UserDevice;
 use App\Notifications\SendOtpNotification;
 use App\Repositories\Contracts\{SettingRepositoryInterface, UserRepositoryInterface};
-use App\Services\TwilioService;
+use App\Services\{TwilioService, DateTimeService};
 use Illuminate\Http\{JsonResponse, Request};
 use Illuminate\Support\Facades\{Cache, Log, RateLimiter};
 
@@ -36,6 +36,7 @@ class AuthController extends Controller
      * @param UserRepositoryInterface $userRepository
      * @param SettingRepositoryInterface $settingRepository
      * @param TwilioService $twilioService
+     * @param DateTimeService $dateTimeService
      *
      * @return void
      */
@@ -43,6 +44,7 @@ class AuthController extends Controller
         private readonly UserRepositoryInterface $userRepository,
         private readonly SettingRepositoryInterface $settingRepository,
         private readonly TwilioService $twilioService,
+        private readonly DateTimeService $dateTimeService
     ) {
     }
 
@@ -263,8 +265,15 @@ class AuthController extends Controller
         // OTP matched, clear cache
         Cache::forget($key);
 
-        // Set timezone
-        UtilityHelper::setUserTimezone($user, $request->input('timezone'));
+        /*
+        |--------------------------------------------------------------------------
+        | Set timezone
+        |--------------------------------------------------------------------------
+        */
+        $this->dateTimeService->setUserTimezone(
+            $user,
+            $request->input('timezone')
+        );
 
         /*
         | Device handling:

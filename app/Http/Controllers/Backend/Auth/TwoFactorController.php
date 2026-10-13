@@ -6,7 +6,7 @@ use App\Helpers\UtilityHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\Auth\VerifyGoogle2faRequest;
 use App\Repositories\Contracts\UserRepositoryInterface;
-use App\Services\GoogleTwoFactorService;
+use App\Services\{GoogleTwoFactorService, DateTimeService};
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -18,12 +18,14 @@ class TwoFactorController extends Controller
      *
      * @param UserRepositoryInterface $userRepository
      * @param GoogleTwoFactorService $googleTwoFactorService
+     * @param DateTimeService $dateTimeService
      *
      * @return void
      */
     public function __construct(
         private readonly UserRepositoryInterface $userRepository,
         private readonly GoogleTwoFactorService $googleTwoFactorService,
+        private readonly DateTimeService $dateTimeService
     ) {
     }
 
@@ -107,7 +109,15 @@ class TwoFactorController extends Controller
 
         $request->session()->regenerate();
 
-        UtilityHelper::setUserTimezone($user, $request->input('timezone'));
+        /*
+        |--------------------------------------------------------------------------
+        | Set timezone
+        |--------------------------------------------------------------------------
+        */
+        $this->dateTimeService->setUserTimezone(
+            $user,
+            $request->input('timezone')
+        );
 
         /*
         |--------------------------------------------------------------------------

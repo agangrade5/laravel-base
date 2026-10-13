@@ -146,10 +146,7 @@
                                         </td>
                                         <!-- Created Date -->
                                         <td>
-                                            <span class="small fw-semibold text-secondary d-block"><i class="bi bi-clock me-1"></i>
-                                                {{ \App\Helpers\UtilityHelper::formatDateTime($log->created_at, 'd M Y') }}
-                                            </span>
-                                            <small class="small text-muted">{{ \App\Helpers\UtilityHelper::formatDateTime($log->created_at, 'h:i:s A') }}</small>
+                                            @datetime($log->created_at)
                                         </td>
                                         <!-- Actions -->
                                         <td class="text-end pe-4">

@@ -7,6 +7,8 @@ use Illuminate\Pagination\Paginator;
 use App\Services\MailConfigService;
 use App\Repositories\Contracts\SettingRepositoryInterface;
 use App\Services\FileUploadService;
+use App\Services\DateTimeService;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Log;
 
 class AppServiceProvider extends ServiceProvider
@@ -27,6 +29,18 @@ class AppServiceProvider extends ServiceProvider
         |
         */
         $this->app->singleton(FileUploadService::class);
+
+        /*
+        |--------------------------------------------------------------------------
+        | Date Time Service
+        |--------------------------------------------------------------------------
+        |
+        | Registered as a scoped singleton so the selected date & time format
+        | (settings table) is read only once per request. It is lazy, so no
+        | database query runs at boot time.
+        |
+        */
+        $this->app->scoped(DateTimeService::class);
     }
 
     /**
@@ -53,6 +67,22 @@ class AppServiceProvider extends ServiceProvider
         if (! app()->runningInConsole()) {
             $mailConfigService->apply();
         }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Blade @datetime directive
+        |--------------------------------------------------------------------------
+        |
+        | Usage: @datetime($model->created_at) or @datetime($model->created_at, 'd M Y')
+        | Formats the date using the admin-selected format and the user's timezone.
+        |
+        */
+        Blade::directive('datetime', function ($expression) {
+            // Resolve the full class name here (the compiled view has no "use" imports)
+            $service = DateTimeService::class;
+
+            return "<?php echo e(app('{$service}')->format({$expression})); ?>";
+        });
 
         /*
         |--------------------------------------------------------------------------

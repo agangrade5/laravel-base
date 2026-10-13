@@ -6,14 +6,14 @@
 <div class="app-content-header">
     <div class="container-fluid">
         <div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-2">
-             <div>
-                <h4 class="page-title pt-2">Admin Dashboard</h4>
+            <div>
+                <h4 class="page-title pt-2">{{ Str::ucfirst(auth()->user()->getRoleNames()->first() ?? 'No Role') }} Dashboard</h4>
                 <p class="page-subtitle text-muted mb-0">Welcome back, {{ auth()->user()->name }}!</p>
-             </div>
-             <div class="dashboard-date-badge px-3 py-2 rounded-3 border d-flex align-items-center gap-2">
+            </div>
+            <div class="dashboard-date-badge px-3 py-2 rounded-3 border d-flex align-items-center gap-2">
                 <i class="bi bi-calendar3 text-primary"></i>
-                <span class="small fw-semibold">{{ now()->format('l, F d, Y') }}</span>
-             </div>
+                <span class="small fw-semibold">@datetime(now(), 'l, F d, Y')</span>
+            </div>
         </div>
     </div>
 </div>
@@ -117,7 +117,7 @@
                                                 {{ $log->description }}
                                             </td>
                                             <td>
-                                                {{ \App\Helpers\UtilityHelper::formatDateTime($log->created_at) }}
+                                                @datetime($log->created_at)
                                             </td>
                                             <td>
                                                 <button
@@ -197,5 +197,5 @@
 @endsection
 
 @push('scripts')
-    {!! \App\Helpers\UtilityHelper::returnScriptWithNonce(asset('assets/js/backend/activity-logs.js')) !!}
+{!! \App\Helpers\UtilityHelper::returnScriptWithNonce(asset('assets/js/backend/activity-logs.js')) !!}
 @endpush

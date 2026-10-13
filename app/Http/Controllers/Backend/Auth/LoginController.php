@@ -7,9 +7,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\Auth\{LoginRequest, UserLoginRequest, VerifyOtpRequest};
 use App\Notifications\SendOtpNotification;
 use App\Repositories\Contracts\{UserRepositoryInterface, SettingRepositoryInterface};
-use App\Services\TwilioService;
+use App\Services\{TwilioService, DateTimeService};
 use Carbon\Carbon;
-use DateTimeZone;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\{Auth, Log, Session};
 use Illuminate\View\View;
@@ -25,6 +24,7 @@ class LoginController extends Controller
      * @param UserRepositoryInterface $userRepository
      * @param SettingRepositoryInterface $settingRepository
      * @param TwilioService $twilioService
+     * @param DateTimeService $dateTimeService
      *
      * @return void
      */
@@ -32,6 +32,7 @@ class LoginController extends Controller
         private readonly UserRepositoryInterface $userRepository,
         private readonly SettingRepositoryInterface $settingRepository,
         private readonly TwilioService $twilioService,
+        private readonly DateTimeService $dateTimeService
     ) {
     }
 
@@ -148,7 +149,7 @@ class LoginController extends Controller
         | Set timezone
         |--------------------------------------------------------------------------
         */
-        UtilityHelper::setUserTimezone(
+        $this->dateTimeService->setUserTimezone(
             $user,
             $request->input('timezone')
         );
@@ -632,7 +633,7 @@ class LoginController extends Controller
 
         if (
             now()->greaterThan(
-                \Carbon\Carbon::parse(
+                Carbon::parse(
                     $otpData['expires_at']
                 )
             )
@@ -811,9 +812,9 @@ class LoginController extends Controller
         | Set User Timezone
         |--------------------------------------------------------------------------
         */
-        UtilityHelper::setUserTimezone(
+        $this->dateTimeService->setUserTimezone(
             $user,
-            $request->input('timezone') ?? null
+            $request->input('timezone') ?? ($otpData['timezone'] ?? null)
         );
 
         /*

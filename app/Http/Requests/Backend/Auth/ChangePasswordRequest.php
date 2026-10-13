@@ -47,6 +47,7 @@ class ChangePasswordRequest extends FormRequest
         return [
             'current_password.required' => trans('validation.required'),
             'current_password.current_password' => trans('validation.current_password'),
+            
             'password.required' => trans('validation.required'),
             'password.confirmed' => trans('validation.password.confirmed'),
             'password.different' => trans('validation.password.different'),

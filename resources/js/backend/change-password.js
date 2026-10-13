@@ -116,58 +116,41 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-
     /*
     |--------------------------------------------------------------------------
     | Show Validation Errors
     |--------------------------------------------------------------------------
     */
-
     const showValidationErrors = (errors) => {
         if (errors.current_password) {
-
             currentPassword.classList.add('is-invalid');
-
             currentPasswordError.textContent =
                 errors.current_password[0];
         }
-
         if (errors.password) {
-
             password.classList.add('is-invalid');
-
             passwordError.textContent =
                 errors.password[0];
         }
-
         if (errors.password_confirmation) {
-
             passwordConfirmation.classList.add('is-invalid');
-
             passwordConfirmationError.textContent =
                 errors.password_confirmation[0];
         }
     };
-
 
     /*
     |--------------------------------------------------------------------------
     | Submit
     |--------------------------------------------------------------------------
     */
-
     form.addEventListener('submit', async (event) => {
 
         event.preventDefault();
-
         clearValidation();
-
         const formData = new FormData(form);
-
         const originalButtonHtml = button.innerHTML;
-
         button.disabled = true;
-
         button.innerHTML = `
             ${originalButtonHtml}
             <span
@@ -177,7 +160,6 @@ document.addEventListener('DOMContentLoaded', () => {
             ></span>`;
 
         try {
-
             const response = await fetch(
                 form.action,
                 {
@@ -187,79 +169,50 @@ document.addEventListener('DOMContentLoaded', () => {
                         'X-CSRF-TOKEN': form.querySelector(
                             'input[name="_token"]'
                         ).value,
-
                         'Accept': 'application/json',
                         'X-Requested-With': 'XMLHttpRequest'
                     }
                 }
             );
-
-
             const data = await response.json();
-
-
             /*
             |--------------------------------------------------------------------------
             | Validation Error
             |--------------------------------------------------------------------------
             */
-
             if (response.status === 422) {
-
                 showValidationErrors(data.errors);
-
-                toastr.error(
-                    'Please correct the highlighted errors.'
-                );
+                toastr.error(data.message || 'Please correct the highlighted errors.');
 
                 return;
             }
-
-
             /*
             |--------------------------------------------------------------------------
             | Success
             |--------------------------------------------------------------------------
             */
-
             if (response.ok && data.status) {
-
                 form.reset();
-
                 currentPassword.focus();
                 resetStrengthMeter();
-
                 toastr.success(data.message);
 
                 return;
             }
-
-
             /*
             |--------------------------------------------------------------------------
             | Other Error
             |--------------------------------------------------------------------------
             */
-
-            toastr.error(
-                data.message ||
-                'Something went wrong. Please try again.'
-            );
-
+            toastr.error(data.message || 'Something went wrong. Please try again.');
         } catch (error) {
-
             console.error(error);
-
             toastr.error(
                 'Unable to update password. Please try again.'
             );
-
         } finally {
-
             button.disabled = false;
-
             button.innerHTML = originalButtonHtml;
         }
     });
-
 });

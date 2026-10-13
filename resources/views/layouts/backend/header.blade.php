@@ -23,15 +23,31 @@
 
         <!--begin::End Navbar Links-->
         <ul class="navbar-nav ms-auto">
+
+            <!--begin::Fullscreen Toggle-->
+            <li class="nav-item">
+                <button
+                    type="button"
+                    class="nav-link"
+                    data-lte-toggle="fullscreen" 
+                    aria-label="Toggle fullscreen"
+                >
+                    <i data-lte-icon="maximize" class="bi bi-arrows-fullscreen"></i>
+                    <i data-lte-icon="minimize" class="bi bi-fullscreen-exit d-none"></i>
+                </button>
+            </li>
+            <!--end::Fullscreen Toggle-->
+
             <!--begin::Color Mode Toggle-->
             <li class="nav-item">
                 <button
                     type="button"
-                    class="nav-link btn border-0 bg-transparent"
+                    class="nav-link"
                     id="theme-toggle-btn"
                     aria-label="Toggle color scheme"
                 >
-                    <i class="bi bi-sun-fill" id="theme-icon-light"></i><i class="bi bi-moon-fill d-none" id="theme-icon-dark"></i>
+                    <i class="bi bi-sun-fill" id="theme-icon-light"></i>
+                    <i class="bi bi-moon-fill d-none" id="theme-icon-dark"></i>
                 </button>
             </li>
             <!--end::Color Mode Toggle-->
@@ -64,7 +80,7 @@
                         />
                         <p>
                             {{ $user->name }}
-                            <small>Member since {{ \App\Helpers\UtilityHelper::formatDateTime($user->created_at, 'M. Y') }}</small>
+                            <small>Member since @datetime($user->created_at, 'M. Y')</small>
                         </p>
                     </li>
                     <!--end::User Image-->

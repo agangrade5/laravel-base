@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\View\View;
 use App\Repositories\Contracts\SettingRepositoryInterface;
 use App\Http\Requests\Backend\Setting\{
+    GeneralSettingRequest,
     OtpSettingRequest,
     TwilioSettingRequest,
     EmailSettingRequest,
@@ -64,15 +65,9 @@ class SettingController extends Controller
      *
      * @return JsonResponse
      */
-    public function updateGeneralSettings(Request $request): JsonResponse
+    public function updateGeneralSettings(GeneralSettingRequest $request): JsonResponse
     {
-        $paginationOptions = implode(',', array_keys(config('constants.general_options.pagination_limit', [])));
-        $expiryOptions = implode(',', array_keys(config('constants.general_options.password_reset_expiry', [])));
-
-        $validated = $request->validate([
-            'pagination_limit' => "sometimes|required|integer|in:{$paginationOptions}",
-            'password_reset_expiry' => "sometimes|required|integer|in:{$expiryOptions}",
-        ]);
+        $validated = $request->validated();
 
         if (empty($validated)) {
             return response()->json([

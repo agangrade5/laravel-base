@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Backend;
 use App\Helpers\UtilityHelper;
 use App\Http\Controllers\Controller;
 use App\Repositories\Contracts\{ActivityLogRepositoryInterface, SettingRepositoryInterface};
+use App\Services\DateTimeService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -17,12 +18,14 @@ class ActivityLogController extends Controller
      *
      * @param ActivityLogRepositoryInterface $activityLogRepository
      * @param SettingRepositoryInterface $settingRepository
+     * @param DateTimeService $dateTimeService
      *
      * @return void
      */
     public function __construct(
         private readonly ActivityLogRepositoryInterface $activityLogRepository,
-        private readonly SettingRepositoryInterface $settingRepository
+        private readonly SettingRepositoryInterface $settingRepository,
+        private readonly DateTimeService $dateTimeService
     ) {
     }
 
@@ -106,7 +109,7 @@ class ActivityLogController extends Controller
                 'causer' => $activity->causer?->name ?? 'System',
                 'event' => $activity->event,
                 'properties' => $activity->properties,
-                'created_at' => UtilityHelper::formatDateTime($activity->created_at),
+                'created_at' => $this->dateTimeService->format($activity->created_at),
             ],
         ]);
     }
