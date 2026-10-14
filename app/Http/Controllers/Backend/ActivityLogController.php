@@ -2,17 +2,19 @@
 
 namespace App\Http\Controllers\Backend;
 
-use App\Helpers\UtilityHelper;
 use App\Http\Controllers\Controller;
 use App\Repositories\Contracts\{ActivityLogRepositoryInterface, SettingRepositoryInterface};
 use App\Services\DateTimeService;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\Request;
+use Illuminate\Http\{JsonResponse, Request};
 use Illuminate\View\View;
-use Spatie\Activitylog\Models\Activity;
+use App\Exports\ActivityLogExport;
+use App\Traits\DownloadsExport;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class ActivityLogController extends Controller
 {
+    use DownloadsExport;
+
     /**
      * Create a new controller instance.
      *
@@ -164,5 +166,34 @@ class ActivityLogController extends Controller
             'status' => true,
             'message' => 'Activity log deleted successfully.',
         ]);
+    }
+
+    /**
+     * Export (filtered) activity logs as xlsx / csv.
+     *
+     * @param Request $request
+     *
+     * @return BinaryFileResponse
+     */
+    public function export(Request $request): BinaryFileResponse
+    {
+        $validated = $request->validate([
+            'format' => 'nullable|in:xlsx,csv',
+            'search' => 'nullable|string|max:255',
+        ]);
+
+        $user = auth()->user();
+
+        $query = $this->activityLogRepository->getLogsQuery(
+            userId: $user->id,
+            isAdmin: $user->hasRole('admin'),
+            search: $validated['search'] ?? null
+        );
+
+        return $this->downloadExport(
+            new ActivityLogExport($query),
+            'activity-logs',
+            $validated['format'] ?? 'xlsx'
+        );
     }
 }

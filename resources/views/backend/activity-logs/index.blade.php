@@ -52,6 +52,11 @@
                                             value="{{ request('search') }}"
                                         />
                                     </div>
+                                    {{-- Export dropdown --}}
+                                    <x-export-dropdown
+                                        :route="auth()->user()->hasRole('admin') ? 'admin.activity-logs.export' : 'activity-logs.export'"
+                                        permission="activity-logs.export"
+                                    />
                                 </div>
                             </div>
                         </div>

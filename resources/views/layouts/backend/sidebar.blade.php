@@ -81,7 +81,7 @@
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a href="{{ route('activity-logs.index') }}" class="nav-link {{ request()->routeIs('admin.activity-logs.index') ? 'active' : '' }}">
+                    <a href="{{ route('activity-logs.index') }}" class="nav-link {{ request()->routeIs('activity-logs.index') ? 'active' : '' }}">
                         <i class="nav-icon bi bi-activity"></i>Activity Logs
                     </a>
                 </li>

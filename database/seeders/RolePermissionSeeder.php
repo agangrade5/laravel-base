@@ -54,6 +54,12 @@ class RolePermissionSeeder extends Seeder
             'guard_name' => 'web',
         ]);
 
+        // export permission
+        $exportPermission = Permission::firstOrCreate([
+            'name' => 'activity-logs.export',
+            'guard_name' => 'web',
+        ]);
+
         /*
         |--------------------------------------------------------------------------
         | Admin Permissions
@@ -64,6 +70,7 @@ class RolePermissionSeeder extends Seeder
             $viewPermission,
             $viewAllPermission,
             $deletePermission,
+            $exportPermission,
         ]);
 
         /*
@@ -74,6 +81,7 @@ class RolePermissionSeeder extends Seeder
 
         $userRole->givePermissionTo([
             $viewPermission,
+            $exportPermission, // user can only export activity logs
         ]);
 
         /*

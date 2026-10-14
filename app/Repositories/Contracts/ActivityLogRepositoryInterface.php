@@ -4,6 +4,7 @@ namespace App\Repositories\Contracts;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Database\Eloquent\Builder;
 use Spatie\Activitylog\Models\Activity;
 
 interface ActivityLogRepositoryInterface
@@ -22,6 +23,23 @@ interface ActivityLogRepositoryInterface
         bool $isAdmin = false,
         int $limit = 5
     ): Collection;
+
+    /**
+     * Build the filtered activity log query (shared by listing & export).
+     *
+     * getLogsQuery() -> getLogs()
+     *
+     * @param int $userId
+     * @param bool $isAdmin
+     * @param string|null $search
+     *
+     * @return Builder
+     */
+    public function getLogsQuery(
+        int $userId,
+        bool $isAdmin = false,
+        ?string $search = null
+    ): Builder;
 
     /**
      * Get paginated activity logs.

@@ -160,6 +160,13 @@ $activityLogRoutes = function (string $indexPermission) {
                 ])
                 ->name('index');
 
+            Route::middleware('permission:activity-logs.export')
+                ->get('/export', [
+                    ActivityLogController::class,
+                    'export',
+                ])
+                ->name('export');
+
             Route::middleware('permission:activity-logs.view')
                 ->get('/{id}', [
                     ActivityLogController::class,

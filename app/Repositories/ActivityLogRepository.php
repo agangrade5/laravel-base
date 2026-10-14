@@ -6,6 +6,7 @@ use App\Repositories\Contracts\ActivityLogRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Collection;
 use Spatie\Activitylog\Models\Activity;
+use Illuminate\Database\Eloquent\Builder;
 
 class ActivityLogRepository implements ActivityLogRepositoryInterface
 {
@@ -41,6 +42,44 @@ class ActivityLogRepository implements ActivityLogRepositoryInterface
     }
 
     /**
+     * Build the filtered activity log query (shared by listing & export).
+     *
+     * getLogsQuery() -> getLogs()
+     *
+     * @param int $userId
+     * @param bool $isAdmin
+     * @param string|null $search
+     *
+     * @return Builder
+     */
+    public function getLogsQuery(
+        int $userId,
+        bool $isAdmin = false,
+        ?string $search = null
+    ): Builder {
+        return Activity::query()
+            ->with('causer')
+            // Admin sees all logs, normal user sees only own logs
+            ->when(!$isAdmin, fn (Builder $q) => $q->where('causer_id', $userId))
+            ->when(!empty($search), function (Builder $query) use ($search) {
+                $query->where(function (Builder $q) use ($search) {
+                    $q->where('id', 'like', "%{$search}%")
+                        ->orWhere('log_name', 'like', "%{$search}%")
+                        ->orWhere('event', 'like', "%{$search}%")
+                        ->orWhere('description', 'like', "%{$search}%")
+                        ->orWhere('subject_type', 'like', "%{$search}%")
+                        ->orWhere('subject_id', 'like', "%{$search}%")
+                        ->orWhereHas('causer', function ($userQuery) use ($search) {
+                            $userQuery->where('name', 'like', "%{$search}%")
+                                ->orWhere('email', 'like', "%{$search}%");
+                        });
+                });
+            })
+            ->latest('created_at')
+            ->orderByDesc('id'); // Latest first by default
+    }
+
+    /**
      * Get paginated activity logs.
      *
      * @param int $userId
@@ -56,47 +95,7 @@ class ActivityLogRepository implements ActivityLogRepositoryInterface
         ?string $search = null,
         int $perPage = 10
     ): LengthAwarePaginator {
-
-        $query = Activity::query()
-            ->with('causer')
-            ->latest('created_at');
-
-        /*
-        |--------------------------------------------------------------------------
-        | User Access
-        |--------------------------------------------------------------------------
-        */
-        if (!$isAdmin) {
-            $query->where('causer_id', $userId);
-        }
-
-        /*
-        |--------------------------------------------------------------------------
-        | Search All Columns
-        |--------------------------------------------------------------------------
-        */
-        if (!empty($search)) {
-
-            $query->where(function ($q) use ($search) {
-
-                // Activity columns
-                $q->where('id', 'like', "%{$search}%")
-                    ->orWhere('log_name', 'like', "%{$search}%")
-                    ->orWhere('event', 'like', "%{$search}%")
-                    ->orWhere('description', 'like', "%{$search}%")
-                    ->orWhere('subject_type', 'like', "%{$search}%")
-                    ->orWhere('subject_id', 'like', "%{$search}%");
-
-                // User name + email
-                $q->orWhereHas('causer', function ($userQuery) use ($search) {
-                    $userQuery->where('name', 'like', "%{$search}%")
-                        ->orWhere('email', 'like', "%{$search}%");
-                });
-
-            });
-        }
-
-        return $query
+        return $this->getLogsQuery($userId, $isAdmin, $search)
             ->paginate($perPage)
             ->withQueryString();
     }
