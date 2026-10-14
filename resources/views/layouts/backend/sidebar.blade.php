@@ -43,6 +43,11 @@
                     </a>
                 </li>
                 <li class="nav-item">
+                    <a href="{{ route('admin.activity-logs.index') }}" class="nav-link {{ request()->routeIs('admin.activity-logs.index') ? 'active' : '' }}">
+                        <i class="nav-icon bi bi-activity"></i>Activity Logs
+                    </a>
+                </li>
+                <li class="nav-item">
                     <a href="{{ route('admin.settings.index') }}" class="nav-link {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
                         <i class="nav-icon bi bi-gear"></i>Settings
                     </a>
@@ -73,6 +78,11 @@
                 <li class="nav-item">
                     <a href="{{ route('dashboard') }}" class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}">
                         <i class="nav-icon bi bi-speedometer"></i>Dashboard
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('activity-logs.index') }}" class="nav-link {{ request()->routeIs('admin.activity-logs.index') ? 'active' : '' }}">
+                        <i class="nav-icon bi bi-activity"></i>Activity Logs
                     </a>
                 </li>
                 <li class="nav-item">
