@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "3f49704f2afa6ca74335d521a54938e4",
+    "content-hash": "ee4dfc809ec33e5bd7342a6f0c278e03",
     "packages": [
         {
             "name": "aws/aws-crt-php",
@@ -5150,78 +5150,6 @@
                 }
             ],
             "time": "2026-07-03T15:36:01+00:00"
-        },
-        {
-            "name": "spatie/laravel-rdap",
-            "version": "1.4.2",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/spatie/laravel-rdap.git",
-                "reference": "7f657f803795b1b33b03c747b9b79e654d1ee31d"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-rdap/zipball/7f657f803795b1b33b03c747b9b79e654d1ee31d",
-                "reference": "7f657f803795b1b33b03c747b9b79e654d1ee31d",
-                "shasum": ""
-            },
-            "require": {
-                "guzzlehttp/guzzle": "^7.8.1|^8.0",
-                "illuminate/cache": "^10.0|^11.0|^12.0|^13.0",
-                "illuminate/contracts": "^10.0|^11.0|^12.0|^13.0",
-                "illuminate/http": "^10.0|^11.0|^12.0|^13.0",
-                "php": "^8.2",
-                "spatie/laravel-package-tools": "^1.16.4"
-            },
-            "require-dev": {
-                "larastan/larastan": "^2.9.2|^3.0",
-                "nunomaduro/collision": "^6.0|^7.10|^8.9",
-                "orchestra/testbench": "^8.22.2|^9.0|^10.0|^11.0",
-                "pestphp/pest": "^2.34.6|^3.7|^4.4",
-                "pestphp/pest-plugin-laravel": "^2.3|^3.0|^4.1",
-                "phpstan/extension-installer": "^1.3.1",
-                "phpstan/phpstan-deprecation-rules": "^1.1.4|^2.0",
-                "spatie/laravel-ray": "^1.36"
-            },
-            "type": "library",
-            "extra": {
-                "laravel": {
-                    "aliases": {
-                        "Rdap": "Spatie\\Rdap\\Facades\\Rdap"
-                    },
-                    "providers": [
-                        "Spatie\\Rdap\\RdapServiceProvider"
-                    ]
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Spatie\\Rdap\\": "src",
-                    "Spatie\\Rdap\\Database\\Factories\\": "database/factories"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Freek Van der Herten",
-                    "email": "freek@spatie.be",
-                    "role": "Developer"
-                }
-            ],
-            "description": "Perform RDAP queries in a Laravel app",
-            "homepage": "https://github.com/spatie/laravel-rdap",
-            "keywords": [
-                "laravel",
-                "laravel-rdap",
-                "spatie"
-            ],
-            "support": {
-                "source": "https://github.com/spatie/laravel-rdap/tree/1.4.2"
-            },
-            "time": "2026-08-23T20:26:45+00:00"
         },
         {
             "name": "symfony/clock",
