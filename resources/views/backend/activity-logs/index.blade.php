@@ -57,6 +57,20 @@
                                         :route="auth()->user()->hasRole('admin') ? 'admin.activity-logs.export' : 'activity-logs.export'"
                                         permission="activity-logs.export"
                                     />
+                                    @can('activity-logs.delete')
+                                        <button
+                                            type="button"
+                                            id="bulk-delete-btn"
+                                            class="btn btn-danger d-none"
+                                            data-url="{{ route('admin.activity-logs.bulk-destroy') }}"
+                                            data-confirm-title="Delete Selected Logs?"
+                                            data-confirm-button="Yes, Delete"
+                                            data-confirm-button-class="btn btn-danger"
+                                        >
+                                            <i class="bi bi-trash me-1"></i>
+                                            Delete Selected (<span id="bulk-selected-count">0</span>)
+                                        </button>
+                                    @endcan
                                 </div>
                             </div>
                         </div>
@@ -65,10 +79,15 @@
                     <!--begin::Card Body-->
                     <div class="card-body p-0">
                         <div class="table-responsive">
-                            <table class="table table-hover align-middle m-0">
+                            <table class="table table-hover align-middle m-0" data-bulk-table>
                                 <thead>
                                     <tr>
-                                        <th class="ps-4">S.No</th>
+                                        @can('activity-logs.delete')
+                                            <th class="ps-4" style="width: 40px;">
+                                                <input type="checkbox" class="form-check-input bulk-select-all" style="width: 0.90rem; height: 0.90rem;" aria-label="Select all">
+                                            </th>
+                                        @endcan
+                                        <th class="{{ auth()->user()->can('activity-logs.delete') ? '' : 'ps-4' }}">S.No</th>
                                         <th>User</th>
                                         <th>Log Name</th>
                                         <th>Description</th>
@@ -107,6 +126,17 @@
                                         };
                                     @endphp
                                     <tr id="activity-log-row-{{ $log->id }}">
+                                        @can('activity-logs.delete')
+                                            <td class="ps-4">
+                                                <input
+                                                    type="checkbox"
+                                                    class="form-check-input bulk-select-item"
+                                                    value="{{ $log->id }}"
+                                                    aria-label="Select log {{ $log->id }}"
+                                                >
+                                            </td>
+                                        @endcan
+                                        <!-- S.No -->
                                         <td class="ps-4">
                                             {{ $logs->firstItem() + $loop->index }}
                                         </td>
@@ -225,4 +255,5 @@
 
 @push('scripts')
 {!! \App\Helpers\UtilityHelper::returnScriptWithNonce(asset('assets/js/backend/activity-logs.js')) !!}
+{!! \App\Helpers\UtilityHelper::returnScriptWithNonce(asset('assets/js/backend/bulk-delete.js')) !!}
 @endpush

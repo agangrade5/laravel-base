@@ -46,6 +46,7 @@ export default defineConfig({
                 'resources/js/backend/change-password.js',
                 'resources/js/backend/user.js',
                 'resources/js/backend/activity-logs.js',
+                'resources/js/backend/bulk-delete.js',
                 'resources/js/backend/otp-settings.js',
                 'resources/js/backend/twilio-settings.js',
                 'resources/js/backend/email-settings.js',

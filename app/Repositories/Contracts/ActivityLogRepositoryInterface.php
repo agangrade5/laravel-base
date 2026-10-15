@@ -79,4 +79,13 @@ interface ActivityLogRepositoryInterface
     public function delete(
         Activity $activity
     ): bool;
+
+    /**
+     * Delete multiple activity logs by IDs.
+     *
+     * @param array<int, int> $ids
+     *
+     * @return int Number of deleted rows
+     */
+    public function deleteByIds(array $ids): int;
 }

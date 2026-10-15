@@ -127,4 +127,18 @@ class ActivityLogRepository implements ActivityLogRepositoryInterface
     ): bool {
         return (bool) $activity->delete();
     }
+
+    /**
+     * Delete multiple activity logs by IDs.
+     *
+     * @param array<int, int> $ids
+     *
+     * @return int Number of deleted rows
+     */
+    public function deleteByIds(array $ids): int
+    {
+        return Activity::query()
+            ->whereIn('id', $ids)
+            ->delete();
+    }
 }

@@ -10,7 +10,6 @@ use App\Http\Requests\Backend\Auth\ChangePasswordRequest;
 use App\Http\Requests\Backend\ExportRequest;
 use Illuminate\Http\{RedirectResponse, JsonResponse};
 use App\Exports\UserExport;
-use App\Services\DateTimeService;
 use App\Traits\DownloadsExport;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -28,8 +27,7 @@ class UserController extends Controller
      */
     public function __construct(
         private readonly UserRepositoryInterface $userRepository,
-        private readonly SettingRepositoryInterface $settingRepository,
-        private readonly DateTimeService $dateTimeService
+        private readonly SettingRepositoryInterface $settingRepository
     ) {
     }
 
@@ -95,6 +93,24 @@ class UserController extends Controller
             ]);
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | Activity Log
+        |--------------------------------------------------------------------------
+        */
+        UtilityHelper::customActivityLog(
+            'User',
+            'User created successfully.',
+            $user,
+            [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ]
+        );
+
         return redirect()
             ->back()
             ->with('success', $message);
@@ -125,6 +141,24 @@ class UserController extends Controller
             ]);
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | Activity Log
+        |--------------------------------------------------------------------------
+        */
+        UtilityHelper::customActivityLog(
+            'User',
+            'User updated successfully.',
+            $user,
+            [
+                'id' => $id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ]
+        );
+
         return redirect()
             ->back()
             ->with('success', $message);
@@ -147,6 +181,24 @@ class UserController extends Controller
                 'message' => 'Unable to delete user.',
             ], 500);
         }
+
+        /*
+        |--------------------------------------------------------------------------
+        | Activity Log
+        |--------------------------------------------------------------------------
+        */
+        UtilityHelper::customActivityLog(
+            'User',
+            'User deleted successfully.',
+            auth()->user(),
+            [
+                'id' => $id,
+                'name' => auth()->user()->name,
+                'email' => auth()->user()->email,
+                'ip' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+            ]
+        );
 
         return response()->json([
             'status' => true,
@@ -180,6 +232,9 @@ class UserController extends Controller
             'Profile updated successfully.',
             $user,
             [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
                 'ip' => $request->ip(),
                 'user_agent' => $request->userAgent(),
             ]
@@ -218,6 +273,9 @@ class UserController extends Controller
             'Password changed successfully.',
             $user,
             [
+                'id' => $user->id,
+                'name' => $user->name,
+                'email' => $user->email,
                 'ip' => $request->ip(),
                 'user_agent' => $request->userAgent(),
             ]
@@ -238,6 +296,22 @@ class UserController extends Controller
      */
     public function export(ExportRequest $request): BinaryFileResponse
     {
+        /*
+        |--------------------------------------------------------------------------
+        | Activity Log
+        |--------------------------------------------------------------------------
+        */
+        UtilityHelper::customActivityLog(
+            'Activity Log',
+            'Users exported successfully.',
+            auth()->user(),
+            [
+                'search' => $request->exportSearch() ?? null,
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ]
+        );
+
         return $this->downloadExport(
             new UserExport(
                 $this->userRepository->getUsersQuery($request->exportSearch())

@@ -8,7 +8,8 @@ use App\Services\DateTimeService;
 use Illuminate\Http\{JsonResponse, Request};
 use Illuminate\View\View;
 use App\Exports\ActivityLogExport;
-use App\Http\Requests\Backend\ExportRequest;
+use App\Helpers\UtilityHelper;
+use App\Http\Requests\Backend\{ExportRequest, BulkDeleteRequest};
 use App\Traits\DownloadsExport;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -142,7 +143,6 @@ class ActivityLogController extends Controller
             ], 403);
         }
 
-
         $activity = $this->activityLogRepository->findById($id);
 
         if (!$activity) {
@@ -151,7 +151,6 @@ class ActivityLogController extends Controller
                 'message' => 'Activity log not found.',
             ], 404);
         }
-
 
         $deleted = $this->activityLogRepository->delete($activity);
 
@@ -162,6 +161,23 @@ class ActivityLogController extends Controller
             ], 500);
         }
 
+        /*
+        |--------------------------------------------------------------------------
+        | Activity Log
+        |--------------------------------------------------------------------------
+        */
+        UtilityHelper::customActivityLog(
+            'Activity Log',
+            'Activity log deleted successfully.',
+            $user,
+            [
+                'id' => $id,
+                'name' => $user->name,
+                'email' => $user->email,
+                'ip' => request()->ip(),
+                'user_agent' => request()->userAgent(),
+            ]
+        );
 
         return response()->json([
             'status' => true,
@@ -186,10 +202,67 @@ class ActivityLogController extends Controller
             search: $request->exportSearch()
         );
 
+        /*
+        |--------------------------------------------------------------------------
+        | Activity Log
+        |--------------------------------------------------------------------------
+        */
+        UtilityHelper::customActivityLog(
+            'Activity Log',
+            'Activity logs exported successfully.',
+            $user,
+            [
+                'search' => $request->exportSearch() ?? null,
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ]
+        );
+
         return $this->downloadExport(
             new ActivityLogExport($query),
             'activity-logs',
             $request->exportFormat()
         );
+    }
+
+    /**
+     * Delete multiple activity logs. Only admin can delete.
+     *
+     * @param BulkDeleteRequest $request
+     *
+     * @return JsonResponse
+     */
+    public function bulkDestroy(BulkDeleteRequest $request): JsonResponse
+    {
+        if (!auth()->user()->hasRole('admin')) {
+            return response()->json([
+                'status' => false,
+                'message' => 'You are not authorized to delete activity logs.',
+            ], 403);
+        }
+
+        $deletedCount = $this->activityLogRepository->deleteByIds($request->ids());
+
+        /*
+        |--------------------------------------------------------------------------
+        | Activity Log
+        |--------------------------------------------------------------------------
+        */
+        UtilityHelper::customActivityLog(
+            'Activity Log',
+            "{$deletedCount} activity " . str('log')->plural($deletedCount) . ' deleted successfully.',
+            auth()->user(),
+            [
+                'ids' => $request->ids(),
+                'ip' => $request->ip(),
+                'user_agent' => $request->userAgent(),
+            ]
+        );
+
+        return response()->json([
+            'status' => true,
+            'message' => "{$deletedCount} activity " . str('log')->plural($deletedCount) . ' deleted successfully.',
+            'deleted' => $deletedCount,
+        ]);
     }
 }

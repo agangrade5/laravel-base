@@ -157,31 +157,31 @@ $activityLogRoutes = function (string $indexPermission) {
                 ->get('/', [
                     ActivityLogController::class,
                     'index',
-                ])
-                ->name('index');
+                ])->name('index');
 
             Route::middleware('permission:activity-logs.export')
                 ->get('/export', [
                     ActivityLogController::class,
                     'export',
-                ])
-                ->name('export')->middleware('throttle:5,1'); // 5 requests per minute
+                ])->name('export')->middleware('throttle:5,1'); // 5 requests per minute
+
+            Route::middleware('permission:activity-logs.delete')
+                ->delete('/bulk-delete', [
+                    ActivityLogController::class,
+                    'bulkDestroy',
+                ])->name('bulk-destroy');
 
             Route::middleware('permission:activity-logs.view')
                 ->get('/{id}', [
                     ActivityLogController::class,
                     'show',
-                ])
-                ->name('show');
+                ])->name('show');
 
-            Route::middleware([
-                'permission:activity-logs.delete',
-                'role:admin',
-            ])->delete('/{id}', [
-                ActivityLogController::class,
-                'destroy',
-            ])->name('destroy');
-
+            Route::middleware('permission:activity-logs.delete')
+                ->delete('/{id}', [
+                    ActivityLogController::class,
+                    'destroy',
+                ])->name('destroy');
         });
 };
 
