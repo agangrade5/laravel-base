@@ -91,6 +91,9 @@ abstract class BaseExport implements
     }
 
     /**
+     * Prevent CSV/Excel formula injection.
+     * Phone numbers (+91 1231231233) and plain numeric values are left untouched.
+     *
      * Sanitize string value.
      *
      * @param mixed $value
@@ -99,10 +102,20 @@ abstract class BaseExport implements
      */
     protected function sanitize(mixed $value): mixed
     {
-        if (is_string($value) && preg_match('/^[=+\-@\t\r]/', $value)) {
-            return "'" . $value;
+        if (!is_string($value) || $value === '') {
+            return $value;
         }
 
-        return $value;
+        // Starts with a dangerous character?
+        if (!preg_match('/^[=+\-@\t\r]/', $value)) {
+            return $value;
+        }
+
+        // Safe: phone / numeric like "+91 1231231233", "-12.5", "+1 (555) 123-4567"
+        if (preg_match('/^[+\-]?[\d\s().\-]+$/', $value)) {
+            return $value;
+        }
+
+        return "'" . $value;
     }
 }

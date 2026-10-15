@@ -4,6 +4,7 @@ namespace App\Repositories\Contracts;
 
 use App\Models\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 
 interface UserRepositoryInterface
 {
@@ -51,6 +52,15 @@ interface UserRepositoryInterface
      * @return User
      */
     public function findByPhoneWithCountry(string $phone): ?User;
+
+    /**
+     * Build the filtered users query (shared by listing & export).
+     *
+     * @param string|null $search
+     *
+     * @return Builder
+     */
+    public function getUsersQuery(?string $search = null): Builder;
 
     /**
      * Method to retrieve all users

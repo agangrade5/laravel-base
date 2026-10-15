@@ -3,7 +3,6 @@
 namespace App\Exports;
 
 use App\Services\DateTimeService;
-use Illuminate\Database\Eloquent\Builder;
 use Spatie\Activitylog\Models\Activity;
 
 class ActivityLogExport extends BaseExport
@@ -23,8 +22,8 @@ class ActivityLogExport extends BaseExport
             'Description',
             'Causer Type',
             'Causer ID',
-            'Properties',
             'Date & Time',
+            'Properties',
         ];
     }
 
@@ -45,8 +44,8 @@ class ActivityLogExport extends BaseExport
             $model->description,
             $model->causer_type ? class_basename($model->causer_type) : '-',
             $model->causer_id ?? '-',
-            $this->toJson($model->properties),
             app(DateTimeService::class)->format($model->created_at),
+            $this->toJson($model->properties),
         ];
     }
 

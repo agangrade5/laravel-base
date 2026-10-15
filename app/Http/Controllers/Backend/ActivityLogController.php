@@ -8,6 +8,7 @@ use App\Services\DateTimeService;
 use Illuminate\Http\{JsonResponse, Request};
 use Illuminate\View\View;
 use App\Exports\ActivityLogExport;
+use App\Http\Requests\Backend\ExportRequest;
 use App\Traits\DownloadsExport;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
@@ -171,29 +172,24 @@ class ActivityLogController extends Controller
     /**
      * Export (filtered) activity logs as xlsx / csv.
      *
-     * @param Request $request
+     * @param ExportRequest $request
      *
      * @return BinaryFileResponse
      */
-    public function export(Request $request): BinaryFileResponse
+    public function export(ExportRequest $request): BinaryFileResponse
     {
-        $validated = $request->validate([
-            'format' => 'nullable|in:xlsx,csv',
-            'search' => 'nullable|string|max:255',
-        ]);
-
         $user = auth()->user();
 
         $query = $this->activityLogRepository->getLogsQuery(
             userId: $user->id,
             isAdmin: $user->hasRole('admin'),
-            search: $validated['search'] ?? null
+            search: $request->exportSearch()
         );
 
         return $this->downloadExport(
             new ActivityLogExport($query),
             'activity-logs',
-            $validated['format'] ?? 'xlsx'
+            $request->exportFormat()
         );
     }
 }

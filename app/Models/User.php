@@ -14,6 +14,7 @@ use App\Notifications\CustomResetPasswordNotification;
 use Laravel\Sanctum\HasApiTokens;
 use App\Services\FileUploadService;
 use Illuminate\Database\Eloquent\Casts\Attribute;
+use Illuminate\Support\Str;
 
 #[Fillable(['name', 'email', 'country_iso', 'country_code', 'phone_number', 'timezone', 'password', 'image', 'is_active'])]
 #[Hidden(['password', 'google2fa_secret', 'remember_token'])]
@@ -40,6 +41,18 @@ class User extends Authenticatable
             'google2fa_enabled' => 'boolean',
             'google2fa_enabled_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Get the name attribute.
+     *
+     * @return Attribute
+     */
+    protected function name(): Attribute
+    {
+        return Attribute::make(
+            get: fn (?string $value) => $value ? Str::title($value) : $value,
+        );
     }
 
     /**

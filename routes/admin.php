@@ -165,7 +165,7 @@ $activityLogRoutes = function (string $indexPermission) {
                     ActivityLogController::class,
                     'export',
                 ])
-                ->name('export');
+                ->name('export')->middleware('throttle:5,1'); // 5 requests per minute
 
             Route::middleware('permission:activity-logs.view')
                 ->get('/{id}', [
@@ -341,6 +341,11 @@ Route::middleware('auth')->group(function () use ($activityLogRoutes, $settingsR
                     'allUsers',
                 ])->name('index');
 
+                Route::get('/export', [
+                    UserController::class,
+                    'export'
+                ])->name('export')->middleware('throttle:5,1'); // 5 requests per minute
+
                 Route::post('/', [
                     UserController::class,
                     'storeUser',
@@ -360,7 +365,6 @@ Route::middleware('auth')->group(function () use ($activityLogRoutes, $settingsR
                     UserController::class,
                     'destroyUser',
                 ])->name('destroy');
-
             });
 
             /*

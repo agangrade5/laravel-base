@@ -7,6 +7,7 @@ use App\Repositories\Contracts\UserRepositoryInterface;
 use App\Services\FileUploadService;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\UploadedFile;
 
 class UserRepository implements UserRepositoryInterface
@@ -90,6 +91,28 @@ class UserRepository implements UserRepositoryInterface
     }
 
     /**
+     * Build the filtered users query (shared by listing & export).
+     *
+     * @param string|null $search
+     *
+     * @return Builder
+     */
+    public function getUsersQuery(?string $search = null): Builder
+    {
+        return User::query()
+            ->withoutRole('admin')
+            ->with('roles:id,name')
+            ->when(!empty($search), function (Builder $query) use ($search) {
+                $query->where(function (Builder $q) use ($search) {
+                    $q->where('name', 'like', "%{$search}%")
+                        ->orWhere('email', 'like', "%{$search}%");
+                });
+            })
+            ->latest()
+            ->orderByDesc('id'); // tie-breaker for chunked export
+    }
+
+    /**
      * Method to retrieve all users with pagination and optional search.
      *
      * @param string|null $search
@@ -99,14 +122,7 @@ class UserRepository implements UserRepositoryInterface
      */
     public function getAllUsers(?string $search = null, int $perPage = 10): LengthAwarePaginator
     {
-        return User::withoutRole('Admin')
-            ->when($search, function ($query, $search) {
-                $query->where(function ($q) use ($search) {
-                    $q->where('name', 'like', "%{$search}%")
-                        ->orWhere('email', 'like', "%{$search}%");
-                });
-            })
-            ->latest()
+        return $this->getUsersQuery($search)
             ->paginate($perPage)
             ->withQueryString();
     }

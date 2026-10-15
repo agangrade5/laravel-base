@@ -7,11 +7,17 @@ use App\Repositories\Contracts\{UserRepositoryInterface, SettingRepositoryInterf
 use Illuminate\View\View;
 use App\Http\Requests\Backend\User\{UserRequest, ProfileUpdateRequest};
 use App\Http\Requests\Backend\Auth\ChangePasswordRequest;
+use App\Http\Requests\Backend\ExportRequest;
 use Illuminate\Http\{RedirectResponse, JsonResponse};
-use Illuminate\Support\Facades\Auth;
+use App\Exports\UserExport;
+use App\Services\DateTimeService;
+use App\Traits\DownloadsExport;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class UserController extends Controller
 {
+    use DownloadsExport;
+
     /**
      * Create a new controller instance.
      *
@@ -23,6 +29,7 @@ class UserController extends Controller
     public function __construct(
         private readonly UserRepositoryInterface $userRepository,
         private readonly SettingRepositoryInterface $settingRepository,
+        private readonly DateTimeService $dateTimeService
     ) {
     }
 
@@ -220,5 +227,23 @@ class UserController extends Controller
             'status' => true,
             'message' => 'Password updated successfully.',
         ]);
+    }
+
+    /**
+     * Export (filtered) users as xlsx / csv.
+     *
+     * @param ExportRequest $request
+     *
+     * @return BinaryFileResponse
+     */
+    public function export(ExportRequest $request): BinaryFileResponse
+    {
+        return $this->downloadExport(
+            new UserExport(
+                $this->userRepository->getUsersQuery($request->exportSearch())
+            ),
+            'users',
+            $request->exportFormat()
+        );
     }
 }

@@ -5,7 +5,7 @@
     Login Verification
 </h2>
 
-<p>Hello {{ Str::ucfirst($user->name ?? 'User') }},</p>
+<p>Hello {{ $user->name ?? 'User' }},</p>
 
 <p>
     We received a request to log in to your
