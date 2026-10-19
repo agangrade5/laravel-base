@@ -63,14 +63,6 @@ class RegisterRequest extends ApiRequest
                 'required',
                 'timezone'
             ],
-            'latitude' => [
-                'required',
-                'numeric'
-            ],
-            'longitude' => [
-                'required',
-                'numeric'
-            ],
             'device_id' => [
                 'required',
                 'string',

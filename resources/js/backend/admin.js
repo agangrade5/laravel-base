@@ -248,23 +248,6 @@ document.addEventListener('DOMContentLoaded', () => {
         timezoneInput.value =
             Intl.DateTimeFormat().resolvedOptions().timeZone;
     }
-
-    // Set latitude and longitude
-    const latitudeInput = document.getElementById('latitude');
-    const longitudeInput = document.getElementById('longitude');
-    if (latitudeInput && longitudeInput && navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                latitudeInput.value = position.coords.latitude;
-                longitudeInput.value = position.coords.longitude;
-            },
-            (error) => {
-                // 1 = permission denied, 2 = position unavailable, 3 = timeout
-                console.warn('Geolocation error:', error.code, error.message);
-            },
-            { timeout: 10000, maximumAge: 600000 }
-        );
-    }
 });
 
 // ========================================

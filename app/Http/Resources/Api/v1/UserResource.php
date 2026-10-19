@@ -24,11 +24,15 @@ class UserResource extends JsonResource
             'phone_number' => $this->phone_number,
             'phone' => $this->country_code . $this->phone_number,
             'timezone' => $this->timezone,
-            'latitude' => $this->latitude,
-            'longitude' => $this->longitude,
             'profile_image' => $this->image
                 ? app(FileUploadService::class)->url($this->image)
                 : null,
+            'latitude' => $this->location?->latitude,
+            'longitude' => $this->location?->longitude,
+            'city' => $this->location?->city,
+            'state' => $this->location?->state,
+            'country' => $this->location?->country,
+            'postcode' => $this->location?->postcode,
         ];
     }
 }

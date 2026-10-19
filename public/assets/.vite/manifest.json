@@ -74,6 +74,12 @@
     "src": "resources/js/backend/image-cropper.js",
     "isEntry": true
   },
+  "resources/js/backend/location.js": {
+    "file": "js/backend/location.js",
+    "name": "location",
+    "src": "resources/js/backend/location.js",
+    "isEntry": true
+  },
   "resources/js/backend/otp-settings.js": {
     "file": "js/backend/otp-settings.js",
     "name": "otp-settings",

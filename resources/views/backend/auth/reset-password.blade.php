@@ -23,9 +23,6 @@
                 @csrf
 
                 <input type="hidden" name="token" value="{{ $token }}">
-                <input type="hidden" name="timezone" id="timezone">
-                <input type="hidden" name="latitude" id="latitude">
-                <input type="hidden" name="longitude" id="longitude">
 
                 <!-- Email field -->
                 <div class="mb-3">
@@ -48,8 +45,6 @@
                         <div class="text-danger small mt-1"><i class="bi bi-exclamation-circle me-1"></i>{{ $message }}</div>
                     @enderror
                 </div>
-
-
 
                 <!-- Password field -->
                 <div class="mb-3">

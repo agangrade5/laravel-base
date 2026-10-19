@@ -15,8 +15,9 @@ use Laravel\Sanctum\HasApiTokens;
 use App\Services\FileUploadService;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Str;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
-#[Fillable(['name', 'email', 'country_iso', 'country_code', 'phone_number', 'timezone', 'latitude', 'longitude', 'password', 'image', 'status'])]
+#[Fillable(['name', 'email', 'country_iso', 'country_code', 'phone_number', 'timezone', 'password', 'image', 'status'])]
 #[Hidden(['password', 'google2fa_secret', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -99,6 +100,16 @@ class User extends Authenticatable
                 return $default;
             }
         });
+    }
+
+    /**
+     * Get the user's location.
+     *
+     * @return HasOne
+     */
+    public function location(): HasOne
+    {
+        return $this->hasOne(UserLocation::class);
     }
 }
 

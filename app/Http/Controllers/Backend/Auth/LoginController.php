@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\Auth\{LoginRequest, UserLoginRequest, VerifyOtpRequest};
 use App\Notifications\SendOtpNotification;
 use App\Repositories\Contracts\{UserRepositoryInterface, SettingRepositoryInterface};
-use App\Services\{TwilioService, DateTimeService};
+use App\Services\{TwilioService, DateTimeService, UserLocationService};
 use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\{Auth, Log, Session};
@@ -25,6 +25,7 @@ class LoginController extends Controller
      * @param SettingRepositoryInterface $settingRepository
      * @param TwilioService $twilioService
      * @param DateTimeService $dateTimeService
+     * @param UserLocationService $userLocationService
      *
      * @return void
      */
@@ -32,7 +33,8 @@ class LoginController extends Controller
         private readonly UserRepositoryInterface $userRepository,
         private readonly SettingRepositoryInterface $settingRepository,
         private readonly TwilioService $twilioService,
-        private readonly DateTimeService $dateTimeService
+        private readonly DateTimeService $dateTimeService,
+        private readonly UserLocationService $userLocationService
     ) {
     }
 
@@ -156,15 +158,12 @@ class LoginController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | Set latitude and longitude
+        | Set user location
         |--------------------------------------------------------------------------
         */
-        $this->userRepository->update(
-            $user->id,
-            [
-                'latitude' => $request->input('latitude'),
-                'longitude' => $request->input('longitude'),
-            ]
+        $this->userLocationService->sync(
+            $user,
+            $request->only(['latitude', 'longitude', 'city', 'state', 'country', 'postcode'])
         );
 
         /*
@@ -834,15 +833,12 @@ class LoginController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | Set latitude and longitude
+        | Set user location
         |--------------------------------------------------------------------------
         */
-        $this->userRepository->update(
-            $user->id,
-            [
-                'latitude' => $request->input('latitude'),
-                'longitude' => $request->input('longitude'),
-            ]
+        $this->userLocationService->sync(
+            $user,
+            $request->only(['latitude', 'longitude', 'city', 'state', 'country', 'postcode'])
         );
 
         /*

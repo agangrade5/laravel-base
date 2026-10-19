@@ -3,17 +3,19 @@
 namespace App\Providers;
 
 use App\Repositories\Contracts\{
-    ActivityLogRepositoryInterface,
     UserRepositoryInterface,
+    UserLocationRepositoryInterface,
     SettingRepositoryInterface,
     DashboardRepositoryInterface,
+    ActivityLogRepositoryInterface,
 };
 
 use App\Repositories\{
-    ActivityLogRepository,
     UserRepository,
+    UserLocationRepository,
     SettingRepository,
     DashboardRepository,
+    ActivityLogRepository,
 };
 
 use Illuminate\Support\ServiceProvider;
@@ -33,13 +35,16 @@ class RepositoryServiceProvider extends ServiceProvider
             UserRepositoryInterface::class,
             UserRepository::class
         );
-
-        /* Setting Repository Binding */
+        // User Location Repository Binding
+        $this->app->bind(
+            UserLocationRepositoryInterface::class,
+            UserLocationRepository::class
+        );
+        // Setting Repository Binding
         $this->app->bind(
             SettingRepositoryInterface::class,
             SettingRepository::class
         );
-
         /* Dashboard Repository Binding */
         $this->app->bind(
             DashboardRepositoryInterface::class,
@@ -50,6 +55,7 @@ class RepositoryServiceProvider extends ServiceProvider
             ActivityLogRepositoryInterface::class,
             ActivityLogRepository::class
         );
+
     }
 
     public function boot(): void

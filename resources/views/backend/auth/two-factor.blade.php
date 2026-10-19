@@ -55,8 +55,9 @@
                 @csrf
 
                 <input type="hidden" name="timezone" id="timezone">
-                <input type="hidden" name="latitude" id="latitude">
-                <input type="hidden" name="longitude" id="longitude">
+
+                <!-- Hidden location fields -->
+                <x-location-fields />
 
                 {{-- Authentication Code --}}
                 <div class="mb-4">

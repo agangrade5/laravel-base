@@ -6,7 +6,7 @@ use App\Helpers\UtilityHelper;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Backend\Auth\VerifyGoogle2faRequest;
 use App\Repositories\Contracts\UserRepositoryInterface;
-use App\Services\{GoogleTwoFactorService, DateTimeService};
+use App\Services\{GoogleTwoFactorService, DateTimeService, UserLocationService};
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\View\View;
@@ -19,13 +19,15 @@ class TwoFactorController extends Controller
      * @param UserRepositoryInterface $userRepository
      * @param GoogleTwoFactorService $googleTwoFactorService
      * @param DateTimeService $dateTimeService
+     * @param UserLocationService $userLocationService
      *
      * @return void
      */
     public function __construct(
         private readonly UserRepositoryInterface $userRepository,
         private readonly GoogleTwoFactorService $googleTwoFactorService,
-        private readonly DateTimeService $dateTimeService
+        private readonly DateTimeService $dateTimeService,
+        private readonly UserLocationService $userLocationService
     ) {
     }
 
@@ -65,6 +67,7 @@ class TwoFactorController extends Controller
                 ->withErrors(['login' => 'Your session has expired, please login again.']);
         }
 
+        // Get the user
         $user = $this->userRepository->findById($userId);
 
         if (!$user || !$user->google2fa_enabled || !$user->google2fa_secret) {
@@ -121,15 +124,12 @@ class TwoFactorController extends Controller
 
         /*
         |--------------------------------------------------------------------------
-        | Set latitude and longitude
+        | Set user location
         |--------------------------------------------------------------------------
         */
-        $this->userRepository->update(
-            $user->id,
-            [
-                'latitude' => $request->input('latitude'),
-                'longitude' => $request->input('longitude'),
-            ]
+        $this->userLocationService->sync(
+            $user,
+            $request->only(['latitude', 'longitude', 'city', 'state', 'country', 'postcode'])
         );
 
         /*

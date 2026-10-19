@@ -5,6 +5,7 @@
 
 {!! \App\Helpers\UtilityHelper::returnScriptWithNonce(asset('assets/js/backend/admin.js')) !!}
 {!! \App\Helpers\UtilityHelper::returnScriptWithNonce(asset('assets/js/backend/country-code.js')) !!}
+{!! \App\Helpers\UtilityHelper::returnScriptWithNonce(asset('assets/js/backend/location.js')) !!}
 
 <script nonce="{{ csp_nonce('script') }}">
     const SELECTOR_SIDEBAR_WRAPPER = ".sidebar-wrapper";

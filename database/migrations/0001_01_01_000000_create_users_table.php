@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('country_iso')->nullable();
             $table->string('country_code')->nullable();
             $table->string('phone_number')->nullable();
+            $table->string('timezone')->nullable();
             $table->string('image')->nullable();
             $table->boolean('status')->default(1);
             $table->timestamp('email_verified_at')->nullable();

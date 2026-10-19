@@ -21,13 +21,11 @@ class WeatherService
      * constructor
      *
      * @param OpenMeteoClient $client
-     * @param LocationService $locationService
      *
      * @return void
      */
     public function __construct(
-        private readonly OpenMeteoClient $client,
-        private readonly LocationService $locationService
+        private readonly OpenMeteoClient $client
     ) {
     }
 
@@ -41,13 +39,15 @@ class WeatherService
      */
     public function forUser(User $user): ?array
     {
-        if ($user->latitude === null || $user->longitude === null) {
+        $location = $user->location;
+
+        if (!$location || $location->latitude === null || $location->longitude === null) {
             return null;
         }
 
-        // Round to 2 decimal places
-        $latitude = round((float) $user->latitude, 2);
-        $longitude = round((float) $user->longitude, 2);
+        // Round to 2 decimal places (~1 km), nearby users share one cache
+        $latitude = round((float) $location->latitude, 2);
+        $longitude = round((float) $location->longitude, 2);
 
         $cacheKey = "dashboard.weather.{$latitude}_{$longitude}";
 
@@ -66,10 +66,12 @@ class WeatherService
         // Cache failed responses for 5 minutes
         if ($weather === null) {
             Cache::put($cacheKey . '.failed', true, now()->addMinutes(self::FAILED_RETRY_MINUTES));
+
+            return null; // Failed to fetch
         }
 
-        // Location is cached separately, so it is not mixed with the weather cache.
-        $weather['location'] = $this->locationService->reverse($latitude, $longitude)['label'] ?? null;
+        // Add the location
+        $weather['location'] = $location->label ?: null;
 
         return $weather;
     }
