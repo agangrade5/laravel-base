@@ -24,7 +24,7 @@
     <div class="container-fluid">
         <!-- Metrics Row -->
         <div class="row g-4 mb-4">
-            <!--Test -->
+            <!-- Box 1: Test -->
             <div class="col-lg-3 col-sm-6">
                 <div class="small-box text-bg-primary">
                     <div class="inner">
@@ -33,6 +33,18 @@
                     </div>
                     <i class="bi bi-display small-box-icon"></i>
                 </div>
+            </div>
+            <!-- Weather -->
+            <div class="col-lg-9 col-sm-6">
+                @if($weather)
+                    <x-weather-card :weather="$weather" />
+                @else
+                    <div class="card h-100 mb-0">
+                        <div class="card-body d-flex align-items-center text-muted small">
+                            <i class="bi bi-geo-alt me-2"></i> Allow location access to see weather.
+                        </div>
+                    </div>
+                @endif
             </div>
         </div>
 

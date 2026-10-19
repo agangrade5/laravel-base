@@ -156,6 +156,19 @@ class LoginController extends Controller
 
         /*
         |--------------------------------------------------------------------------
+        | Set latitude and longitude
+        |--------------------------------------------------------------------------
+        */
+        $this->userRepository->update(
+            $user->id,
+            [
+                'latitude' => $request->input('latitude'),
+                'longitude' => $request->input('longitude'),
+            ]
+        );
+
+        /*
+        |--------------------------------------------------------------------------
         | Activity Log - Login Success
         |--------------------------------------------------------------------------
         */
@@ -341,6 +354,8 @@ class LoginController extends Controller
             'value' => $value,
             'otp' => $otp,
             'timezone' => $request->input('timezone'),
+            'latitude' => $request->input('latitude'),
+            'longitude' => $request->input('longitude'),
             'expires_at' => now()->addSeconds($maxTime),
             /*
             | Wrong OTP attempts
@@ -819,6 +834,19 @@ class LoginController extends Controller
 
         /*
         |--------------------------------------------------------------------------
+        | Set latitude and longitude
+        |--------------------------------------------------------------------------
+        */
+        $this->userRepository->update(
+            $user->id,
+            [
+                'latitude' => $request->input('latitude'),
+                'longitude' => $request->input('longitude'),
+            ]
+        );
+
+        /*
+        |--------------------------------------------------------------------------
         | Remove OTP Session
         |--------------------------------------------------------------------------
         */
@@ -934,6 +962,8 @@ class LoginController extends Controller
                 'value' => $otpData['value'],
                 'otp' => $otp,
                 'timezone' => $otpData['timezone'] ?? null,
+                'latitude' => $otpData['latitude'] ?? null,
+                'longitude' => $otpData['longitude'] ?? null,
                 'expires_at' => now()->addSeconds($maxTime),
                 /*
                 | Reset wrong attempts

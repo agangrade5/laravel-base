@@ -19,6 +19,9 @@
                 @csrf
 
                 <input type="hidden" name="timezone" id="timezone">
+                <input type="hidden" name="latitude" id="latitude">
+                <input type="hidden" name="longitude" id="longitude">
+
                 <!-- Full name field -->
                 <div class="mb-3">
                     <label class="form-label fw-semibold text-secondary-emphasis small" for="name">Full Name</label>

@@ -21,6 +21,8 @@ return new class extends Migration
             $table->string('image')->nullable();
             $table->boolean('is_active')->default(1);
             $table->string('timezone', 100)->nullable();
+            $table->decimal('latitude', 8, 5)->nullable();
+            $table->decimal('longitude', 8, 5)->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password')->nullable();
             $table->text('google2fa_secret')->nullable();

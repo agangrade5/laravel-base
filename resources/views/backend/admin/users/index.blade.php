@@ -53,10 +53,12 @@
                                     <button class="btn btn-primary d-flex align-items-center gap-2" data-bs-toggle="modal" data-bs-target="#addUserModal">
                                         <i class="bi bi-person-plus"></i>Add User
                                     </button>
-                                    {{-- Export dropdown --}}
-                                    <x-export-dropdown
-                                        route="admin.users.export"
-                                    />
+                                    @if(count($users) > 0)
+                                        {{-- Export dropdown --}}
+                                        <x-export-dropdown
+                                            route="admin.users.export"
+                                        />
+                                    @endif
                                 </div>
                             </div>
                         </div>

@@ -476,6 +476,8 @@
                 "country_code",
                 "phone_number",
                 "timezone",
+                "latitude",
+                "longitude",
                 "device_id",
                 "device_type"
             ],
@@ -504,6 +506,14 @@
                     "type": "string",
                     "example": "Asia/Kolkata"
                 },
+                "latitude": {
+                    "type": "number",
+                    "example": 28.7041
+                },
+                "longitude": {
+                    "type": "number",
+                    "example": 77.1025
+                },
                 "device_id": {
                     "type": "string",
                     "description": "Unique device identifier",
@@ -524,6 +534,8 @@
             "required": [
                 "login_type",
                 "timezone",
+                "latitude",
+                "longitude",
                 "device_id",
                 "device_type"
             ],
@@ -554,6 +566,14 @@
                 "timezone": {
                     "type": "string",
                     "example": "Asia/Kolkata"
+                },
+                "latitude": {
+                    "type": "number",
+                    "example": 28.7041
+                },
+                "longitude": {
+                    "type": "number",
+                    "example": 77.1025
                 },
                 "device_id": {
                     "type": "string",
@@ -598,10 +618,6 @@
                     "type": "string",
                     "description": "Required when login_type = phone",
                     "example": "9876543210"
-                },
-                "timezone": {
-                    "type": "string",
-                    "example": "Asia/Kolkata"
                 }
             }
         },
@@ -611,6 +627,8 @@
                 "login_type",
                 "otp",
                 "timezone",
+                "latitude",
+                "longitude",
                 "device_id",
                 "device_type"
             ],
@@ -645,6 +663,14 @@
                 "timezone": {
                     "type": "string",
                     "example": "Asia/Kolkata"
+                },
+                "latitude": {
+                    "type": "number",
+                    "example": 28.7041
+                },
+                "longitude": {
+                    "type": "number",
+                    "example": 77.1025
                 },
                 "device_id": {
                     "type": "string",
@@ -692,6 +718,18 @@
                 "country_iso": {
                     "type": "string",
                     "example": "in"
+                },
+                "timezone": {
+                    "type": "string",
+                    "example": "Asia/Kolkata"
+                },
+                "latitude": {
+                    "type": "number",
+                    "example": 28.7041
+                },
+                "longitude": {
+                    "type": "number",
+                    "example": 77.1025
                 },
                 "profile_image": {
                     "type": "string",

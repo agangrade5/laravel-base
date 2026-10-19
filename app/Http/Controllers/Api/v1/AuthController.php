@@ -80,6 +80,8 @@ class AuthController extends Controller
             'country_code' => $request->input('country_code'),
             'phone_number' => $request->input('phone_number'),
             'timezone' => $request->input('timezone'),
+            'latitude' => $request->input('latitude'),
+            'longitude' => $request->input('longitude'),
         ]);
 
         // Assign role
@@ -273,6 +275,19 @@ class AuthController extends Controller
         $this->dateTimeService->setUserTimezone(
             $user,
             $request->input('timezone')
+        );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Set latitude and longitude
+        |--------------------------------------------------------------------------
+        */
+        $this->userRepository->update(
+            $user->id,
+            [
+                'latitude' => $request->input('latitude'),
+                'longitude' => $request->input('longitude'),
+            ]
         );
 
         /*

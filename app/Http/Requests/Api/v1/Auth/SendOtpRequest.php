@@ -48,10 +48,6 @@ class SendOtpRequest extends ApiRequest
                 'digits_between:7,15',
             ];
         }
-        $rules['timezone'] = [
-            'required',
-            'timezone',
-        ];
 
         return $rules;
     }

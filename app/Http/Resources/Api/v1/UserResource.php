@@ -23,6 +23,9 @@ class UserResource extends JsonResource
             'country_code' => $this->country_code,
             'phone_number' => $this->phone_number,
             'phone' => $this->country_code . $this->phone_number,
+            'timezone' => $this->timezone,
+            'latitude' => $this->latitude,
+            'longitude' => $this->longitude,
             'profile_image' => $this->image
                 ? app(FileUploadService::class)->url($this->image)
                 : null,

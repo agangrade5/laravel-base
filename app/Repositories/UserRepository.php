@@ -145,7 +145,10 @@ class UserRepository implements UserRepositoryInterface
             return false;
         }
 
-        unset($data['password']);
+        // Remove password
+        if (isset($data['password']) && empty($data['password'])) {
+            unset($data['password']);
+        }
 
         return $user->update($data);
     }

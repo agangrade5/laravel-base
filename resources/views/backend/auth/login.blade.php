@@ -19,6 +19,9 @@
                 @csrf
 
                 <input type="hidden" name="timezone" id="timezone">
+                <input type="hidden" name="latitude" id="latitude">
+                <input type="hidden" name="longitude" id="longitude">
+
                 <!-- Email field -->
                 <div class="mb-3">
                     <label class="form-label fw-semibold text-secondary-emphasis small" for="email">Email Address</label>

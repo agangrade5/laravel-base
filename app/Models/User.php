@@ -16,7 +16,7 @@ use App\Services\FileUploadService;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Str;
 
-#[Fillable(['name', 'email', 'country_iso', 'country_code', 'phone_number', 'timezone', 'password', 'image', 'is_active'])]
+#[Fillable(['name', 'email', 'country_iso', 'country_code', 'phone_number', 'timezone', 'latitude', 'longitude', 'password', 'image', 'is_active'])]
 #[Hidden(['password', 'google2fa_secret', 'remember_token'])]
 class User extends Authenticatable
 {

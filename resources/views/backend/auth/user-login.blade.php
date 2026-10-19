@@ -46,6 +46,8 @@
                 @csrf
 
                 <input type="hidden" name="timezone" id="timezone">
+                <input type="hidden" name="latitude" id="latitude">
+                <input type="hidden" name="longitude" id="longitude">
 
                 <!-- Login Type -->
                 <div class="mb-3">

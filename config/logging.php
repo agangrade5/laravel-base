@@ -136,5 +136,14 @@ return [
             'level' => 'debug',
             'days' => 14,
         ],
+        /*
+         * custom api log.
+         */
+        'api' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/api.log'),
+            'level' => 'debug',
+            'days' => 14,
+        ],
     ],
 ];

@@ -53,11 +53,10 @@
             >
 
                 @csrf
-                <input
-                    type="hidden"
-                    name="timezone"
-                    id="timezone"
-                >
+
+                <input type="hidden" name="timezone" id="timezone">
+                <input type="hidden" name="latitude" id="latitude">
+                <input type="hidden" name="longitude" id="longitude">
 
                 {{-- Authentication Code --}}
                 <div class="mb-4">

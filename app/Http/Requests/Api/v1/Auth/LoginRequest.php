@@ -52,6 +52,14 @@ class LoginRequest extends ApiRequest
             'required',
             'timezone',
         ];
+        $rules['latitude'] = [
+            'required',
+            'numeric',
+        ];
+        $rules['longitude'] = [
+            'required',
+            'numeric',
+        ];
         $rules['device_id'] = [
             'required',
             'string',

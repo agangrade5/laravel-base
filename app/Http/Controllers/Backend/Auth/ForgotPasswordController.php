@@ -220,6 +220,19 @@ class ForgotPasswordController extends Controller
 
             /*
             |--------------------------------------------------------------------------
+            | Set latitude and longitude
+            |--------------------------------------------------------------------------
+            */
+            $this->userRepository->update(
+                $user->id,
+                [
+                    'latitude' => $request->input('latitude'),
+                    'longitude' => $request->input('longitude'),
+                ]
+            );
+
+            /*
+            |--------------------------------------------------------------------------
             | Activity Log - Password Reset Successful
             |--------------------------------------------------------------------------
             */

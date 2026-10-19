@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Backend;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\Contracts\{UserRepositoryInterface, ActivityLogRepositoryInterface};
+use App\Services\WeatherService;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 use Illuminate\Support\Facades\Auth;
@@ -15,12 +16,14 @@ class DashboardController extends Controller
      *
      * @param UserRepositoryInterface $userRepository
      * @param ActivityLogRepositoryInterface $activityRepository
+     * @param WeatherService $weatherService
      *
      * @return void
      */
     public function __construct(
         protected UserRepositoryInterface $userRepository,
-        protected ActivityLogRepositoryInterface $activityRepository
+        protected ActivityLogRepositoryInterface $activityRepository,
+        protected WeatherService $weatherService
     ) {}
 
     /**
@@ -51,6 +54,14 @@ class DashboardController extends Controller
                 true,
                 5
             );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Get weather
+        |--------------------------------------------------------------------------
+        */
+        $data['weather'] = $this->weatherService->forUser($user);
+
         $data['title'] = 'Admin Dashboard';
 
         return view('backend.admin.dashboard', $data);
@@ -75,6 +86,14 @@ class DashboardController extends Controller
                 false,
                 5
             );
+
+        /*
+        |--------------------------------------------------------------------------
+        | Get weather
+        |--------------------------------------------------------------------------
+        */
+        $data['weather'] = $this->weatherService->forUser($user);
+
         $data['title'] = 'User Dashboard';
 
         return view('backend.user.dashboard', $data);

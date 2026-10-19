@@ -61,6 +61,8 @@
                 @csrf
 
                 <input type="hidden" name="timezone" id="timezone">
+                <input type="hidden" name="latitude" id="latitude">
+                <input type="hidden" name="longitude" id="longitude">
 
                 <div class="otp-container d-flex justify-content-center gap-2 mb-4">
                     @for ($i = 0; $i < 6; $i++)
