@@ -44,7 +44,7 @@ class UserExport extends BaseExport implements WithColumnFormatting
                 ? trim(($model->country_code ?? '') . ' ' . $model->phone_number)
                 : '-',
             $model->roles->pluck('name')->implode(', ') ?: '-',
-            $model->is_active ? 'Active' : 'Inactive',
+            $model->status ? 'Active' : 'Inactive',
             app(DateTimeService::class)->format($model->created_at),
         ];
     }

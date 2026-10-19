@@ -16,7 +16,7 @@ use App\Services\FileUploadService;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Support\Str;
 
-#[Fillable(['name', 'email', 'country_iso', 'country_code', 'phone_number', 'timezone', 'latitude', 'longitude', 'password', 'image', 'is_active'])]
+#[Fillable(['name', 'email', 'country_iso', 'country_code', 'phone_number', 'timezone', 'latitude', 'longitude', 'password', 'image', 'status'])]
 #[Hidden(['password', 'google2fa_secret', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -36,7 +36,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'is_active' => 'boolean',
+            'status' => 'boolean',
             'google2fa_secret'  => 'encrypted', // stored encrypted at rest
             'google2fa_enabled' => 'boolean',
             'google2fa_enabled_at' => 'datetime',

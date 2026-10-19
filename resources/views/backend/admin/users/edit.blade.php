@@ -76,9 +76,9 @@
                         <label class="form-label fw-semibold text-secondary small" for="edit_user_status">Status</label>
                         <div class="input-group">
                             <span class="input-group-text"><i class="bi bi-toggle-on"></i></span>
-                            <select name="is_active" id="edit_user_status" class="form-select" required>
-                                <option value="1" {{ old('form_type') === 'edit' && old('is_active') === '1' ? 'selected' : '' }}>Active</option>
-                                <option value="0" {{ old('form_type') === 'edit' && old('is_active') === '0' ? 'selected' : '' }}>Inactive</option>
+                            <select name="status" id="edit_user_status" class="form-select" required>
+                                <option value="1" {{ old('form_type') === 'edit' && old('status') === '1' ? 'selected' : '' }}>Active</option>
+                                <option value="0" {{ old('form_type') === 'edit' && old('status') === '0' ? 'selected' : '' }}>Inactive</option>
                             </select>
                         </div>
                     </div>

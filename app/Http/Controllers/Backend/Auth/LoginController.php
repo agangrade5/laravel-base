@@ -132,7 +132,7 @@ class LoginController extends Controller
                 ->withInput($request->only('email', 'remember'));
         }
 
-        if (!$user->is_active) {
+        if (!$user->status) {
             return back()
                 ->withErrors([
                     'email' => 'Your account is inactive.',
@@ -272,7 +272,7 @@ class LoginController extends Controller
         | Check User Status
         |--------------------------------------------------------------------------
         */
-        if (!$user->is_active) {
+        if (!$user->status) {
             UtilityHelper::customActivityLog(
                 'Auth',
                 'OTP requested for an inactive account.',
@@ -572,7 +572,7 @@ class LoginController extends Controller
         | Check User Status
         |--------------------------------------------------------------------------
         */
-        if (!$user->is_active) {
+        if (!$user->status) {
 
             UtilityHelper::customActivityLog(
                 'Auth',

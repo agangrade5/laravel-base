@@ -124,7 +124,7 @@
                                             </td>
                                             <!-- Status badge -->
                                             <td>
-                                                @if($user['is_active'])
+                                                @if($user['status'])
                                                     <span class="badge rounded-pill bg-success-subtle text-success border border-success-subtle px-2 py-1">Active</span>
                                                 @else
                                                     <span class="badge rounded-pill bg-danger-subtle text-danger border border-danger-subtle px-2 py-1">Inactive</span>
@@ -142,7 +142,7 @@
                                                         data-email="{{ $user['email'] }}"
                                                         data-phone="{{ $user['phone_number'] }}"
                                                         data-country-code="{{ $user['country_code'] ?? '+91' }}"
-                                                        data-active="{{ $user['is_active'] ? 1 : 0 }}"
+                                                        data-active="{{ $user['status'] ? 1 : 0 }}"
                                                         title="Edit User"
                                                     >
                                                         <i class="bi bi-pencil-square"></i>

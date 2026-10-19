@@ -73,7 +73,7 @@ class UserRequest extends FormRequest
                     ->where('country_code', $this->input('country_code'))
                     ->ignore($userId),
             ],
-            'is_active' => [
+            'status' => [
                 'nullable',
                 'boolean',
             ],

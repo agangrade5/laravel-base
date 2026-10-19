@@ -198,7 +198,7 @@ class AuthController extends Controller
         }
 
         // User inactive
-        if (!$user->is_active) {
+        if (!$user->status) {
             Cache::forget($key);
             $this->log('OTP verification attempted for an inactive user (API).', $user, $request);
 
@@ -427,7 +427,7 @@ class AuthController extends Controller
         }
 
         // User inactive
-        if (!$user->is_active) {
+        if (!$user->status) {
             $this->log('OTP requested for an inactive account (API).', $user, $request, ['login_type' => $type]);
 
             return $this->respond(false, 'Your account is inactive. Please contact the administrator.', null, 403);
