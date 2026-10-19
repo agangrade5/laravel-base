@@ -34,7 +34,6 @@
 					<i class="bi bi-people-fill small-box-icon"></i>
 				</div>
 			</div>
-
             <!-- Weather -->
             <div class="col-lg-9 col-sm-6">
                 @if($weather)

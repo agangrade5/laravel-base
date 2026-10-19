@@ -6,14 +6,14 @@
 <div class="app-content-header">
     <div class="container-fluid">
         <div class="page-header d-flex justify-content-between align-items-center flex-wrap gap-2">
-             <div>
+            <div>
                 <h4 class="page-title pt-2">{{ Str::ucfirst(auth()->user()->getRoleNames()->first() ?? 'No Role') }} Dashboard</h4>
                 <p class="page-subtitle text-muted mb-0">Welcome back, {{ auth()->user()->name }}!</p>
-             </div>
-             <div class="dashboard-date-badge px-3 py-2 rounded-3 border d-flex align-items-center gap-2">
+            </div>
+            <div class="dashboard-date-badge px-3 py-2 rounded-3 border d-flex align-items-center gap-2">
                 <i class="bi bi-calendar3 text-primary"></i>
                 <span class="small fw-semibold">@datetime(now(), 'l, F d, Y')</span>
-             </div>
+            </div>
         </div>
     </div>
 </div>
@@ -22,18 +22,18 @@
 <!--begin::App Content-->
 <div class="app-content">
     <div class="container-fluid">
-        <!-- Metrics Row -->
-        <div class="row g-4 mb-4">
-            <!-- Box 1: Test -->
-            <div class="col-lg-3 col-sm-6">
-                <div class="small-box text-bg-primary">
-                    <div class="inner">
-                        <h3>0<sup class="fs-6 text-white-50">/10</sup></h3>
-                        <p>Test</p>
-                    </div>
-                    <i class="bi bi-display small-box-icon"></i>
-                </div>
-            </div>
+        <!-- Metrics Boxes Row -->
+		<div class="row g-4 mb-4">
+			<!-- Box 1: Total Users -->
+			<div class="col-lg-3 col-sm-6">
+				<div class="small-box text-bg-success">
+					<div class="inner">
+						<h3>0</h3>
+						<p>Test</p>
+					</div>
+					<i class="bi bi-people-fill small-box-icon"></i>
+				</div>
+			</div>
             <!-- Weather -->
             <div class="col-lg-9 col-sm-6">
                 @if($weather)
@@ -46,33 +46,36 @@
                     </div>
                 @endif
             </div>
-        </div>
+		</div>
 
+        <!-- Recent Activities and Action Center Row -->
         <div class="row">
             <!-- Recent System logs -->
-            <div class="col-lg-6 col-12">
+            <div class="col-lg-8 col-12">
                 <div class="card mb-4">
                     <div class="card-header d-flex justify-content-between align-items-center">
-                        <div>
-                            <h5 class="mb-0 fw-bold">Recent System Logs</h5>
-                            <small class="text-muted">Latest server updates</small>
-                        </div>
-                        <a href="{{ route('activity-logs.index') }}" class="btn btn-outline-primary btn-sm px-3">View All Logs</a>
-                    </div>
+						<div>
+							<h6 class="mb-0 fw-bold"><i class="bi bi-activity me-1 text-danger"></i> Recent System Logs</h6>
+							<small class="text-muted">Latest server updates</small>
+						</div>
+                        <a href="{{ route('activity-logs.index') }}"
+                        class="btn btn-outline-primary btn-sm px-3">
+                            View All Logs
+                        </a>
+					</div>
                     <div class="card-body p-0">
                         <div class="table-responsive">
                             <table class="table table-hover align-middle mb-0">
                                 <thead>
                                     <tr>
-                                        <th width="60">#</th>
-                                        <th>User</th>
-                                        <th>Activity</th>
-                                        <th>Date</th>
-                                        <th width="80">Action</th>
+                                        <th width="60">S.No</th>
+										<th>User</th>
+										<th>Activity</th>
+										<th>Date</th>
+										<th width="80">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-
                                     @forelse($recentActivityLogs as $log)
 
                                         @php
@@ -95,7 +98,7 @@
                                         @endphp
                                         <tr>
                                             <td>
-                                                {{ $log->id }}
+                                                {{ $loop->iteration }}
                                             </td>
                                             <td>
                                                 <div class="d-flex align-items-center">
@@ -149,13 +152,39 @@
                                             </td>
                                         </tr>
                                     @endforelse
-
                                 </tbody>
                             </table>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Right Column: Quick Actions & System Overview -->
+			<div class="col-lg-4 col-12">
+				<!-- Quick Action & Administration Tools -->
+				<div class="card border-0 shadow-sm rounded-4 mb-4">
+					<div class="card-header border-0 py-3">
+						<h6 class="mb-0 fw-bold text-body-emphasis"><i class="bi bi-grid-fill me-1 text-primary"></i> Quick Module Shortcuts</h6>
+						<small class="text-muted">Common administrative shortcuts</small>
+					</div>
+					<div class="card-body pt-0">
+						<div class="d-grid gap-2">
+							<a href="{{ route('settings.index') }}" class="quick-action-link p-3 rounded-3 d-flex align-items-center justify-content-between">
+								<div class="d-flex align-items-center gap-3">
+									<div class="quick-action-icon bg-primary-subtle text-primary rounded-3 d-flex align-items-center justify-content-center">
+										<i class="bi bi-gear-fill fs-5"></i>
+									</div>
+									<div>
+										<h6 class="mb-0 fw-bold text-body-emphasis">System Settings</h6>
+										<small class="text-muted">Update configuration and Change Password</small>
+									</div>
+								</div>
+								<i class="bi bi-chevron-right text-muted quick-action-arrow"></i>
+							</a>
+						</div>
+					</div>
+				</div>
+			</div>
         </div>
     </div>
 </div>
